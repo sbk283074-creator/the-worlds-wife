@@ -1,0 +1,8 @@
+# Private assistant memory — never publish
+.workbuddy/
+
+# Source poem inputs (not needed to serve the site)
+*.docx
+
+# OS noise
+.DS_Store

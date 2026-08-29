@@ -1,0 +1,2974 @@
+<!DOCTYPE html>
+<html lang="en" data-page-node-id="6a6iLPkndPU1ZNHmF6ysZD">
+<head data-page-node-id="RZFbG4lCyd6GO7RWTgnyZE">
+<meta charset="UTF-8" data-page-node-id="jKb6x67b1bd7GKHdikUznE" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" data-page-node-id="GEKBIjYZZd3a2X790E6Zon" />
+<title>English Lit Lab</title>
+<style>
+  :root{
+    --paper:#f7f4ec; --ink:#2b2620; --muted:#6f655a; --line:#e2dccd;
+    --crimson:#9b2335; --crimson-soft:#c75c6b; --gold:#9a7b1f; --gold-soft:#e8d39a;
+    --kp:#fbe9c8; --kp-border:#d9a441; --ann:#d8ecd8; --ann-border:#6fae6f;
+    --panel:#fffdf8; --shadow:0 6px 22px rgba(60,40,20,.12);
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0;padding:0;background:var(--paper);color:var(--ink);
+    font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","PingFang SC","Microsoft YaHei",sans-serif;
+    font-size:15px;line-height:1.6;}
+  header.topbar{display:flex;align-items:center;gap:14px;padding:12px 18px;background:var(--panel);
+    border-bottom:2px solid var(--crimson);box-shadow:var(--shadow);position:sticky;top:0;z-index:30;}
+  .brand{font-weight:800;font-size:18px;color:var(--crimson);letter-spacing:.3px;white-space:nowrap}
+  .brand small{display:block;font-weight:500;font-size:11px;color:var(--muted);letter-spacing:0}
+  .topbar .spacer{flex:1}
+  .btn{border:1px solid var(--line);background:#fff;color:var(--ink);padding:7px 12px;border-radius:8px;
+    cursor:pointer;font-size:13px;transition:.15s;white-space:nowrap}
+  .btn:hover{border-color:var(--crimson);color:var(--crimson)}
+  .btn.primary{background:var(--crimson);color:#fff;border-color:var(--crimson)}
+  .btn.primary:hover{background:#7e1c2b}
+  .btn.tiny{padding:4px 9px;font-size:12px}
+  .layout{display:flex;min-height:calc(100vh - 60px)}
+  /* sidebar */
+  aside.side{width:248px;flex:0 0 248px;background:var(--panel);border-right:1px solid var(--line);
+    padding:14px 12px;overflow:auto}
+  aside.side h3{margin:6px 6px 10px;font-size:12px;text-transform:uppercase;letter-spacing:1px;color:var(--muted)}
+  .poem-item{border:1px solid var(--line);border-radius:10px;padding:10px 12px;margin-bottom:10px;cursor:pointer;
+    background:#fff;transition:.15s}
+  .poem-item:hover{border-color:var(--gold)}
+  .poem-item.active{border-color:var(--crimson);box-shadow:0 0 0 2px rgba(155,35,53,.12)}
+  .poem-item .t{font-weight:700;font-size:14px}
+  .poem-item .a{font-size:12px;color:var(--muted);margin-top:2px}
+  .badge{display:inline-block;font-size:10px;background:var(--gold-soft);color:#6b5410;border-radius:6px;
+    padding:1px 6px;margin-top:5px}
+  /* main */
+  main{flex:1;padding:18px 22px;overflow:auto}
+  .tabs{display:flex;gap:6px;border-bottom:1px solid var(--line);margin-bottom:16px;flex-wrap:wrap}
+  .tab{padding:8px 14px;border:1px solid transparent;border-bottom:none;cursor:pointer;border-radius:8px 8px 0 0;
+    color:var(--muted);font-weight:600;font-size:14px}
+  .tab.active{background:#fff;color:var(--crimson);border-color:var(--line);border-bottom:2px solid #fff;margin-bottom:-1px}
+  .view{display:none;animation:fade .2s}
+  .view.active{display:block}
+  @keyframes fade{from{opacity:0;transform:translateY(4px)}to{opacity:1;transform:none}}
+  h2.title{font-family:Georgia,"Times New Roman",serif;font-size:26px;margin:0 0 2px;color:var(--ink)}
+  .byline{color:var(--muted);margin-bottom:16px;font-style:italic}
+  /* poem */
+  .poem{font-family:Georgia,"Times New Roman",serif;font-size:19px;line-height:2.0;max-width:760px;
+    background:#fff;padding:26px 30px;border-radius:12px;box-shadow:var(--shadow);position:relative}
+  .poem .line{white-space:pre-wrap}
+  .poem .gap{height:14px}
+  .poem mark.kp{background:var(--kp);border-bottom:2px solid var(--kp-border);padding:1px 2px;border-radius:3px;
+    cursor:pointer}
+  .poem mark.ann{background:var(--ann);border-bottom:2px solid var(--ann-border);padding:1px 2px;border-radius:3px;
+    cursor:pointer}
+  .hint{color:var(--muted);font-size:13px;margin:10px 2px 0}
+  /* selection toolbar */
+  #selbar{position:fixed;z-index:50;display:none;background:var(--ink);border-radius:10px;padding:5px;
+    box-shadow:var(--shadow);gap:4px}
+  #selbar button{border:none;background:transparent;color:#fff;padding:6px 10px;border-radius:7px;cursor:pointer;
+    font-size:13px}
+  #selbar button:hover{background:rgba(255,255,255,.16)}
+  #selbar button.accent{color:#ffd9a0}
+  /* popover */
+  #pop{position:fixed;z-index:60;max-width:360px;display:none;background:#fff;border:1px solid var(--line);
+    border-radius:12px;box-shadow:var(--shadow);padding:14px 16px}
+  #pop .ptag{font-size:11px;font-weight:700;letter-spacing:.5px;text-transform:uppercase}
+  #pop .ptag.kp{color:var(--gold)}
+  #pop .ptag.ann{color:#3f8f3f}
+  #pop .pquote{font-family:Georgia,serif;font-style:italic;color:var(--crimson);margin:6px 0 8px;font-size:15px}
+  #pop .ptext{font-size:14px}
+  #pop .pzh{font-size:13px;color:var(--muted);margin-top:8px;border-top:1px dashed var(--line);padding-top:8px}
+  #pop .pact{margin-top:10px;display:flex;gap:8px;justify-content:flex-end}
+  /* analysis */
+  .analysis{max-width:820px;background:#fff;border-radius:12px;padding:24px 28px;box-shadow:var(--shadow)}
+  .analysis h3{color:var(--crimson);border-left:4px solid var(--crimson);padding-left:10px;margin-top:22px}
+  .analysis h4{color:var(--gold);margin-bottom:4px}
+  .analysis p{margin:8px 0}
+  .analysis .zh{color:var(--muted);font-size:13px}
+  .analysis ul{margin:6px 0;padding-left:22px}
+  .analysis li{margin:4px 0}
+  .card{background:var(--paper);border:1px solid var(--line);border-radius:10px;padding:12px 14px;margin:10px 0}
+  /* vocab */
+  .vrow{display:flex;gap:10px;align-items:flex-start;background:#fff;border:1px solid var(--line);border-radius:10px;
+    padding:10px 12px;margin-bottom:8px}
+  .vrow .w{flex:0 0 150px;font-weight:700;color:var(--crimson)}
+  .vrow .tr{flex:1}
+  .vrow .ex{font-size:12px;color:var(--muted);font-style:italic;margin-top:3px}
+  .vrow .del{flex:0 0 auto}
+  /* modal */
+  .modal-bg{position:fixed;inset:0;background:rgba(40,30,20,.45);z-index:70;display:none;align-items:center;justify-content:center;padding:16px}
+  .modal-bg.show{display:flex}
+  .modal{background:#fff;border-radius:14px;max-width:560px;width:100%;max-height:86vh;overflow:auto;padding:20px 22px;box-shadow:var(--shadow)}
+  .modal h3{margin-top:0;color:var(--crimson)}
+  .modal label{display:block;font-size:13px;color:var(--muted);margin:12px 0 4px;font-weight:600}
+  .modal input,.modal textarea{width:100%;border:1px solid var(--line);border-radius:8px;padding:9px 11px;
+    font:inherit;font-size:14px}
+  .modal textarea{min-height:90px;resize:vertical;font-family:inherit}
+  .modal .row{display:flex;gap:10px;margin-top:16px;justify-content:flex-end}
+  .tag{display:inline-block;background:var(--gold-soft);color:#6b5410;border-radius:6px;padding:1px 7px;font-size:11px;margin-right:5px}
+  .empty{color:var(--muted);font-style:italic;padding:20px}
+</style>
+</head>
+<body data-page-node-id="ikBjU0pB0nsYwhns0d1zMc">
+<header class="topbar" data-page-node-id="WY2406F0m8FpBb5v9Sfc6H">
+  <div class="brand" data-page-node-id="LVSeEsEalP8fwIKXlopopS">English Lit Lab<small data-page-node-id="wZ44GeFstQpCkjORADOQRZ">DP English A</small></div>
+  <div class="spacer" data-page-node-id="XAvf34HX507tTlSy4iWCPH"></div>
+  <button class="btn" id="btnAdd" data-page-node-id="L3qm5hj2vVLwt3ZnRQlq9L">＋ Add poem</button>
+  <button class="btn" id="btnApi" data-page-node-id="PwbffmmbcaqUN1xMGB4Tym">🌐 Translation API</button>
+  <button class="btn" id="btnExport" data-page-node-id="K8OhsXn8DxZzjz3f4WThXx">⬇ Export</button>
+  <button class="btn" id="btnImport" data-page-node-id="slhnYkHwoMQusR6eAgc7jH">⬆ Import</button>
+  <button class="btn" id="btnHelp" data-page-node-id="voatIfSlJzEFolwhoBjf9C">？ Help</button>
+</header>
+
+<div class="layout" data-page-node-id="gXDlOKoMdwPEgDA2Mcq0dq">
+  <aside class="side" data-page-node-id="ATpP0xhjQE6suvzm2dESXb">
+    <h3 data-page-node-id="HhQjpdfHbce7rRrOX1SGpP">Poems</h3>
+    <div id="poemList" data-page-node-id="7QSJaiwLa5YLS3EK8EOis2"></div>
+  </aside>
+
+  <main data-page-node-id="B0uCog0rWwVLUpsXVGSF1p">
+    <div class="tabs" data-page-node-id="ubKlrhnDZCm7lNGncGxDcL">
+      <div class="tab active" data-view="read" data-page-node-id="H9CHjXOEpoK75p2dIgNgia">📖 Read & Annotate</div>
+      <div class="tab" data-view="analysis" data-page-node-id="9zx6Uq2XBbz5htTPWV4DD2">🔍 Analysis</div>
+      <div class="tab" data-view="keys" data-page-node-id="4ZExKNA5XHCRto0FRf2rqx">⭐ Key lines</div>
+      <div class="tab" data-view="vocab" data-page-node-id="Ib3XYKEwEA4syAQzpnBUtC">📘 Vocab</div>
+    </div>
+
+    <section class="view active" id="view-read" data-page-node-id="slqMWJOU3pbC8t8pbhQXPl">
+      <h2 class="title" id="rTitle" data-page-node-id="7sZyUowHZX37FYGvjMr79J"></h2>
+      <div class="byline" id="rBy" data-page-node-id="fC5GUd9dOfuQARCvXkvXcO"></div>
+      <div class="poem" id="poemBox" data-page-node-id="qv4NgSxkTZ94WCaRKuLggv"></div>
+      <div class="hint" data-page-node-id="vr0KMpQBUEMEGZMyX4Disn">💡 Select any text in the poem to <b data-page-node-id="7vY1jIZhQWfIAwV3bE0XFZ">annotate</b>, <b data-page-node-id="7Zj6EhfNcUPh0SLZFXQRFq">translate</b>, or <b data-page-node-id="GqmfV5g2zkCpiFO1go7wl1">add to Vocab</b>. Click a highlight to read its note.
+        <span class="tag" data-page-node-id="U48LmtHrPyb5htHZbUQDOi">Yellow</span>Teacher notes · <span class="tag" style="background:#d8ecd8;color:#3f8f3f" data-page-node-id="daUEYUobmHJF4shfYQUbmx">Green</span>your note</div>
+    </section>
+
+    <section class="view" id="view-analysis" data-page-node-id="Bf7elz4OA3GN7uznOzSbuJ">
+      <h2 class="title" id="aTitle" data-page-node-id="HgrbYn5BiHizakPuNUhvtC"></h2>
+      <div class="byline" id="aBy" data-page-node-id="Yqvj5EcF5vK9aUCihKzIoY"></div>
+      <div class="analysis" id="analysisBox" data-page-node-id="h6HxNpBuKItGZOrtyTVplJ"></div>
+    </section>
+
+    <section class="view" id="view-keys" data-page-node-id="8KuaM55U36aAN9WESmhwEW">
+      <h2 class="title" id="kTitle" data-page-node-id="OojWsf6bi8EZQb9bdediyV"></h2>
+      <div class="byline" data-page-node-id="lQPbmbF62uyNm2AADCknFA">Teacher-annotated key lines — click to locate in the poem.</div>
+      <div id="keysBox" data-page-node-id="bJ8Fe4EBLqp3lubyrgHtuk"></div>
+    </section>
+
+    <section class="view" id="view-vocab" data-page-node-id="XOtDBKU5HENkzhde7NvUAy">
+      <h2 class="title" data-page-node-id="iQFRwtRnOfUaroKD197kho">📘 Vocabulary</h2>
+      <div class="byline" data-page-node-id="JSq2iYufnDiflRV9XKNVSN">Hard words from the poem plus any you add, with examples and notes. Select text and click “Vocab” to add.</div>
+      <div id="vocabBox" data-page-node-id="E5x1JLzXnRSCzSKlnj8Qcw"></div>
+    </section>
+  </main>
+</div>
+
+<!-- floating selection toolbar -->
+<div id="selbar" data-page-node-id="NcyoqGrTShRiWRbbl8CinA">
+  <button id="sbAnn" class="accent" data-page-node-id="284xoyNHzcO0CZQBZTFBIm">✍ Annotate</button>
+  <button id="sbTr" data-page-node-id="HLbczofQS3adBWgPJyAnO8">🌐 Translate</button>
+  <button id="sbVoc" data-page-node-id="mjbrvnu1nVQFZEt6SkUkuM">📘 Vocab</button>
+</div>
+
+<!-- popover for marks / notes -->
+<div id="pop" data-page-node-id="Cn3ulXToGJVNZEzYsyhyes">
+  <div class="ptag" id="popTag" data-page-node-id="YAW5B4A5RTcL4PljH6NGTv"></div>
+  <div class="pquote" id="popQuote" data-page-node-id="5qXbpwDSb8DikLQxZqIYei"></div>
+  <div class="ptext" id="popText" data-page-node-id="nIx1FAEjF9XQY9WSAkRfoN"></div>
+  <div class="pzh" id="popZh" data-page-node-id="CSeuybAFA7r0cZ3rC9XMy4"></div>
+  <div class="pact" id="popAct" data-page-node-id="JMranr0yT2QIRovrEsLGsn"></div>
+</div>
+
+<!-- modal -->
+<div class="modal-bg" id="modalBg" data-page-node-id="OZTZl8ZxMPPr9mV5tcj7n3"><div class="modal" id="modalBox" data-page-node-id="bocmnxoXhGRmlbQCn1zbzC"></div></div>
+
+<script>
+/* ============================ DATA ============================ */
+const SEED = {
+  poems:[{
+    id:"little-red-cap",
+    title:"Little Red-Cap",
+    author:"Carol Ann Duffy (b. 1955)",
+    context:"From <i>The World's Wife</i> (1999). A feminist revision of the Brothers Grimm / Perrault ‘Little Red Riding Hood’.",
+    text:`Little Red-Cap
+
+At childhood’s end, the houses petered out
+into playing fields, the factory, allotments
+kept, like mistresses, by kneeling married men,
+the silent railway line, the hermit’s caravan,
+till you came at last to the edge of the woods.
+It was there that I first clapped eyes on the wolf.
+
+He stood in a clearing, reading his verse out loud
+in his wolfy drawl, a paperback in his hairy paw,
+red wine staining his bearded jaw. What big ears
+he had! What big eyes he had! What teeth!
+In the interval, I made quite sure he spotted me,
+sweet sixteen, never been, babe, waif, and bought me a drink,
+
+my first. You might ask why. Here’s why. Poetry.
+The wolf, I knew, would lead me deep into the woods,
+away from home, to a dark tangled thorny place
+lit by the eyes of owls. I crawled in his wake,
+my stockings ripped to shreds, scraps of red from my blazer
+snagged on twig and branch, murder clues. I lost both shoes
+
+but got there, wolf’s lair, better beware. Lesson one that night,
+breath of the wolf in my ear, was the love poem.
+I clung till dawn to his thrashing fur, for
+what little girl doesn’t dearly love a wolf?
+Then I slid from between his heavy matted paws
+and went in search of a living bird – white dove –
+
+which flew, straight, from my hands to his open mouth.
+One bite, dead. How nice, breakfast in bed, he said,
+licking his chops. As soon as he slept, I crept to the back
+of the lair, where a whole wall was crimson, gold, aglow with books.
+Words, words were truly alive on the tongue, in the head,
+warm, beating, frantic, winged; music and blood.
+
+But then I was young – and it took ten years
+in the woods to tell that a mushroom
+stoppers the mouth of a buried corpse, that birds
+are the uttered thought of trees, that a greying wolf
+howls the same old song at the moon, year in, year out,
+season after season, same rhyme, same reason. I took an axe
+
+to a willow to see how it wept. I took an axe to a salmon
+to see how it leapt. I took an axe to the wolf
+as he slept, one chop, scrotum to throat, and saw
+the glistening, virgin white of my grandmother’s bones.
+I filled his old belly with stones. I stitched him up.
+Out of the forest I come with my flowers, singing, all alone.`,
+    keyPassages:[
+      {text:"At childhood’s end, the houses petered out",
+       note:"The poem opens on a threshold (‘childhood’s end’). ‘petered out’ = gradually disappeared / dwindled. The familiar, safe, domestic world gives way to the unknown — a classic liminal (in-between) space where growing up happens."},
+      {text:"the silent railway line, the hermit’s caravan",
+       note:"Suburban-edge imagery (playing fields, factory, allotments, a railway, a hermit’s caravan) maps the girl’s move from civilisation toward the wild woods. The ‘hermit’ hints at solitude and outsider-ness."},
+      {text:"It was there that I first clapped eyes on the wolf.",
+       note:"‘clapped eyes on’ = set eyes on / saw. Note the REVERSAL: in the fairy tale the wolf sees Red; here SHE sees HIM first. The gaze — and therefore agency — belongs to the girl. This is Duffy’s feminist rewrite in one line."},
+      {text:"reading his verse out loud\nin his wolfy drawl, a paperback in his hairy paw,",
+       note:"The wolf is not a mindless beast but a reader and reciter of ‘verse’ (poetry). ‘drawl’ = slow, drawn-out way of speaking. Duffy makes him cultured and seductive — desire and literature are linked from the start."},
+      {text:"red wine staining his bearded jaw.",
+       note:"A small but loaded sensory detail: the ‘bearded jaw’ is animal and male at once, while ‘red wine staining’ makes him a drinking, civilised seducer. The word ‘jaw’ quietly foreshadows the teeth — and the eating — to come. Civilisation and the beast share one line."},
+      {text:"What big ears\nhe had! What big eyes he had! What teeth!",
+       note:"An intertextual echo of Red Riding Hood’s ‘What big eyes you have, grandmother!’ But here the girl CATALOGUES the wolf with excitement, not fear. The exclamations show her desire and boldness, not innocence."},
+      {text:"In the interval, I made quite sure he spotted me,",
+       note:"‘interval’ = the gap or pause in a performance. The theatrical word shows she is staging herself: she does not merely ‘meet’ the wolf, she makes sure he sees her. This is active self-presentation — she already directs the scene, not passive within it. Early proof of her control."},
+      {text:"sweet sixteen, never been, babe, waif, and bought me a drink,\nmy first.",
+       note:"‘never been’ is a slang innuendo for virgin / never been with a man. ‘babe, waif’ = helpless young things. The wolf grooms her with alcohol (‘my first’ = first drink). Sinister seduction in casual, colloquial language."},
+      {text:"Poetry.",
+       note:"A one-word line — a sudden epiphany. The wolf leads her not just to sex but to ART and LANGUAGE. ‘Poetry’ is the real treasure of the woods. The short line makes the moment ring out."},
+      {text:"away from home, to a dark tangled thorny place\nlit by the eyes of owls.",
+       note:"The forest = the subconscious and sexual initiation. ‘thorny’ = full of thorns. ‘lit by the eyes of owls’ is eerie and nocturnal — growing up is shown as entering a dark, dangerous, half-magical place."},
+      {text:"my stockings ripped to shreds, scraps of red from my blazer\nsnagged on twig and branch, murder clues.",
+       note:"The red scraps are both the fairy-tale hood and a trail she leaves. ‘murder clues’ = evidence of a killing. In the original she is eaten; here SHE survives and leaves the trail — a feminist subversion."},
+      {text:"breath of the wolf in my ear, was the love poem.",
+       note:"Equivocal line: is the ‘love poem’ the wolf’s breathing, or what he teaches her? Sexual awakening and poetry are fused. The ‘lesson’ of that night is desire itself, learned through the body and through words."},
+      {text:"what little girl doesn’t dearly love a wolf?",
+       note:"A rhetorical question — it expects no answer, so it makes the desire feel natural and shared. The speaker implicates EVERY girl, not just herself, blurring innocence and longing. The playful rhyme (‘girl’ / ‘wolf’) keeps a dark idea light, which is pure Duffy irony."},
+      {text:"a whole wall was crimson, gold, aglow with books.\nWords, words were truly alive on the tongue, in the head,\nwarm, beating, frantic, winged; music and blood.",
+       note:"The genuine treasure is not the grandmother but BOOKS. Words are personified as alive — ‘beating, frantic, winged’ (like a heart / a bird). Literature is what truly saves and transforms her. This is the poem’s emotional centre."},
+      {text:"which flew, straight, from my hands to his open mouth.",
+       note:"The ‘white dove’ is innocence, the spirit, or the self she hands to the wolf. The motion is gentle and fatal: ‘straight… to his open mouth’ gives her purity to the predator. It mirrors the tale’s ‘grandmother, what big teeth’ moment, but here she gives, not he takes."},
+      {text:"One bite, dead. How nice, breakfast in bed, he said,\nlicking his chops.",
+       note:"Black comedy. ‘breakfast in bed’ and ‘licking his chops’ recall a cartoon beast, yet ‘One bite, dead’ is sudden and real. The dove’s death echoes the grandmother’s fate — violence against women and innocence is played as casual wit. Tone = witty, chilling."},
+      {text:"it took ten years\nin the woods to tell that a mushroom\nstoppers the mouth of a buried corpse, that birds\nare the uttered thought of trees",
+       note:"‘stoppers’ = plugs / blocks. Maturation needs time and experience. The woods = life itself. Nature is animated: a mushroom blocks a corpse’s mouth; birds are the ‘uttered’ (spoken) thoughts of trees. She has grown knowing."},
+      {text:"a greying wolf\nhowls the same old song at the moon, year in, year out,\nseason after season, same rhyme, same reason.",
+       note:"The wolf ages (‘greying’) and repeats. ‘same rhyme, same reason’ rhymes itself — a neat formal joke that also condemns his monotony. Male desire, Duffy implies, is a stuck record. Set against the girl’s growth (ten years of learning), this contrast is the poem’s quiet argument."},
+      {text:"I took an axe\nto a willow to see how it wept. I took an axe to a salmon\nto see how it leapt. I took an axe to the wolf\nas he slept, one chop, scrotum to throat, and saw\nthe glistening, virgin white of my grandmother’s bones.",
+       note:"Anaphora — ‘I took an axe to…’ three times, escalating from nature to the wolf. The willow ‘wept’ and salmon ‘leapt’ are personification. ‘scrotum to throat’ is a castration — matriarchal revenge. ‘virgin white’ = the grandmother’s bones: the cycle of male violence is exposed."},
+      {text:"I filled his old belly with stones. I stitched him up.",
+       note:"Echoes the Grimm ending where the wolf is filled with stones. But here SHE does the killing and sewing herself — agency reclaimed. She is the hunter now, not the prey."},
+      {text:"Out of the forest I come with my flowers, singing, all alone.",
+       note:"Final autonomy. ‘all alone’ is defiant, not sad — she survives, speaks, and sings. The ‘flowers’ suggest the poems / her own voice she carries out. A survivor’s triumphant close."}
+    ],
+    vocab:[
+      {word:"petered out",ex:"the houses petered out"},
+      {word:"allotments",ex:"the factory, allotments"},
+      {word:"hermit",ex:"the hermit’s caravan"},
+      {word:"caravan",ex:"the hermit’s caravan"},
+      {word:"drawl",ex:"in his wolfy drawl"},
+      {word:"clapped eyes on",ex:"I first clapped eyes on the wolf"},
+      {word:"thorny",ex:"a dark tangled thorny place"},
+      {word:"thrashing",ex:"his thrashing fur"},
+      {word:"matted",ex:"his heavy matted paws"},
+      {word:"crimson",ex:"a whole wall was crimson, gold"},
+      {word:"stoppers",ex:"a mushroom stoppers the mouth"},
+      {word:"uttered",ex:"birds are the uttered thought of trees"},
+      {word:"scrotum",ex:"one chop, scrotum to throat"},
+      {word:"glistening",ex:"the glistening, virgin white"},
+      {word:"virgin",ex:"virgin white of my grandmother’s bones"},
+      {word:"waif",ex:"babe, waif"},
+      {word:"enjambment",ex:"reading his verse out loud / in his wolfy drawl"},
+      {word:"caesura",ex:"One bite, dead."},
+      {word:"anaphora",ex:"I took an axe to…"},
+      {word:"intertextuality",ex:"What big ears he had!"},
+      {word:"personification",ex:"the willow wept"},
+      {word:"sibilance",ex:"silent… stocks… stitched"},
+      {word:"free verse",ex:"no rhyme scheme"},
+      {word:"prosody",ex:"AT child-HOOD’S end"}
+    ],
+    analysis:`<h3>1 · Context & Big Picture</h3>
+<p><b>Little Red-Cap</b> is the opening poem of Carol Ann Duffy’s <i>The World’s Wife</i> (1999), a collection that retells myths, fairy tales and history from women’s points of view. Duffy takes the Brothers Grimm / Perrault “Little Red Riding Hood” and rewrites it as a <b>coming-of-age and sexual-awakening story</b> told in the first person by the girl herself.</p>
+
+<div class="card"><b>The single most important idea:</b> the wolf is not only a predator — he is also a <b>poet and teacher</b>. The real treasure in the woods is <b>language and literature</b>, and the girl’s journey is from object (prey) to <b>subject (speaking, writing survivor)</b>.</div>
+
+<h3>2 · Speaker, Voice & Tone</h3>
+<p>The speaker is a confident, witty, adult narrator looking back on her girlhood. The <b>register</b> (level of language) keeps shifting: elevated fairy-tale phrasing (“At childhood’s end”) sits next to slang (“babe, waif”, “never been”) and a punchy one-word line (“Poetry.”). This mixing is deliberate — it keeps the poem playful, modern and subversive.</p>
+
+<p><b>Tone:</b> playful → dark → defiant. Notice how humour (“How nice, breakfast in bed, he said”) coexists with violence.</p>
+
+<h3>3 · Key Themes</h3>
+<h4>① Loss of innocence & sexual awakening</h4>
+<ul><li>The wolf initiates her into desire and into poetry at the same time.</li>
+<li>“sweet sixteen, never been” signals virginity; the forest is the site of initiation.</li></ul>
+<h4>② Power, agency & the gaze</h4>
+<ul><li>She “clapped eyes on the wolf” — the gaze is hers. By the end she wields the axe.</li>
+<li>From prey to hunter: “I filled his old belly with stones. I stitched him up.”</li></ul>
+<h4>③ Literature as salvation</h4>
+<ul><li>The wall of books (“crimson, gold, aglow”) replaces the grandmother as the treasure.</li>
+<li>“Words… were truly alive” — writing is what lets her survive and speak.</li></ul>
+<h4>④ Disillusionment & maturity</h4>
+<ul><li>“it took ten years in the woods” — growing up is slow, earned through experience.</li>
+<li>The wolf’s song is “the same old song… same rhyme, same reason” — repetition = stagnation / male cliché.</li></ul>
+
+
+<h3>4 · Poetic Devices — A Deep Dive</h3>
+<p>DP examiners reward close technical reading. Below, the main devices are unpacked with <b>exact lines to quote</b> and a note on <b>effect</b>.</p>
+
+<h4>① Intertextuality — the Grimm / Perrault tale</h4>
+<ul>
+<li>The whole poem is a <b>rewrite</b> of "Little Red Riding Hood". Spot the echoes: "What big ears / … What teeth!" (the girl’s questions to the wolf); "better beware" (the tale’s warning rhythm); the grandmother eaten and the wolf "filled with stones" (the Grimm ending).</li>
+<li><b>Why it matters:</b> Duffy changes WHO speaks and WHO acts. In Grimm the huntsman saves Red; here Red saves herself with an axe. The intertext is the yardstick that makes her reversal visible.</li>
+</ul>
+
+<h4>② Enjambment, caesura & line breaks</h4>
+<ul>
+<li><b>Enjambment</b> (line runs on past the break): "He stood in a clearing, reading his verse out loud / in his wolfy drawl…" pulls you forward like speech, mirroring the journey <i>into</i> the woods.</li>
+<li><b>Caesura & hard stops</b>: "One bite, dead." — the full stop after "dead" is a brutal punch. The one-word line "Poetry." makes the epiphany ring out.</li>
+<li><b>Effect:</b> the form feels like talking, not performing — which is why the adult, ironic voice sounds convincing.</li>
+</ul>
+
+<h4>③ Metre & rhythm (prosody)</h4>
+<ul>
+<li>The poem is <b>free verse</b> (no fixed metre), yet Duffy uses a strong, speech-driven pulse. Listen for <b>trochaic / dactylic</b> movement in the fairy-tale lines: "AT child-HOOD’S end" (DUM-da-DUM-da), "BET-ter be-WARE".</li>
+<li>The "What big ears / he had! What big eyes he had! What teeth!" triplet is almost a <b>chant</b> — regular beats build excitement and parody the nursery rhyme.</li>
+<li>The "I took an axe to…" anaphora has a relentless <b>two-beat</b> hammer rhythm that mimics the chop itself.</li>
+</ul>
+
+<h4>④ Other devices to quote</h4>
+<ul>
+<li><b>Anaphora</b> — "I took an axe to…" (×3) escalates from nature to the wolf.</li>
+<li><b>Personification</b> — willow "wept", salmon "leapt", birds are trees’ "uttered thought", words "beating, frantic, winged".</li>
+<li><b>Metaphor & symbol</b> — wolf = desire / predatory masculinity / the poet; red = hood and blood; flowers = her own poems / voice; the white dove = innocence offered up.</li>
+<li><b>Irony</b> — the wolf who eats the grandmother is himself "filled with stones"; victim becomes killer. The "love poem" is also a hunt.</li>
+<li><b>Sibilance</b> — "silent… stocks… stones… stitched" threads a soft, snake-like sound through the killing.</li>
+</ul>
+
+<h3>5 · Structure</h3>
+<p>Free verse, seven uneven stanzas, no rhyme scheme — the form feels like speech. The narrative moves in <b>episodes</b>: childhood’s edge → meeting the wolf → the “love poem” → discovery of books → ten years of learning → the killing → emergence “all alone”. The journey is circular (into the woods and back out) but the speaker is transformed.</p>
+
+<h3>6 · How to Use This for Your IB Essay</h3>
+<div class="card">
+<p><b>Thesis starters you could develop:</b></p>
+<ul>
+<li>“In <i>Little Red-Cap</i>, Duffy reclaims the fairy tale by transferring agency from the (male) predator to the female speaker, figured most clearly through the shift from gazed-upon object to wielding the axe.”</li>
+<li>“Duffy positions <i>poetry itself</i> as the true ‘treasure’ of the woods, subverting the Gertrude/grandmother figure with a wall of books that grants the speaker survival and voice.”</li>
+<li>“The poem’s colloquial register and one-word lines (‘Poetry.’) undercut the fairy-tale tone, aligning the reader with a knowing, adult speaker rather than an innocent child.”</li>
+</ul>
+<p><b>Pairing idea (for comparative essay):</b> contrast with another Duffy poem (e.g. <i>Anne Hathaway</i>, <i>Mrs Midas</i>) or with a male-voiced poem on desire. Global issue: <i>“Power and privilege”</i> or <i>“Identity and belonging”</i>.</p>
+</div>
+<h3>7 · Examiner-Style Guiding Questions</h3>
+<p>Use these to test yourself for Paper 2 and the Individual Oral. Answer out loud first, then in writing with two quoted lines each.</p>
+<div class="card">
+<ul>
+<li><b>Agency:</b> How does Duffy move the reader from victim to agent? Find two moments where the speaker, not the wolf, holds the power.</li>
+<li><b>Intertextuality:</b> Pick one echo of Grimm or Perrault. How does changing the speaker’s gender reshape the tale’s meaning?</li>
+<li><b>Form:</b> Why free verse rather than a rhyme scheme? What does the one-word line “Poetry.” do that a full sentence could not?</li>
+<li><b>Symbol:</b> What does the “wall… aglow with books” replace from the original tale, and why is that swap the poem’s centre?</li>
+<li><b>Voice &amp; tone:</b> How do slang (“babe, waif”, “never been”) and elevated diction sit together? What does the mix reveal about the speaker?</li>
+<li><b>Global issue:</b> Which IB “global issue” fits best — “Power and privilege”, “Identity and belonging”, or “Beliefs and values”? Defend it with one line.</li>
+</ul>
+</div>
+
+<h3>8 · Model Paragraph — Structure</h3>
+<p>If you write one paragraph on <b>agency</b>, a strong shape is: <b>Point → Evidence (2 lines) → Method (name the device) → Effect → Context</b>.</p>
+<div class="card">
+<p>Opener you could adapt: <i>"Duffy transfers agency to the female speaker from the first encounter: ‘It was there that I first clapped eyes on the wolf’ reverses the tale’s gaze, so the girl — not the predator — becomes the seeing subject."</i></p>
+</div>
+
+
+<h3>9 · Close Reading — “Every Word Is Chosen”</h3>
+<p>Your teacher’s point is the single most useful habit for this poem: Duffy never wastes a word. The IB markscheme rewards “precise textual references” and “close reading”, which means showing <b>why this exact word</b> and not a synonym. Below, loaded words are unpacked one at a time. Treat the list as a drill, not a limit — you should be able to do this for any line.</p>
+<div class="card">
+<ul>
+<li><b>“petered out”</b> — a deflating phrasal verb: the safe, domestic world does not end but <i>drains away</i>. “Peter” is also archaic slang for the penis, a faint bawdy echo that undercuts the innocent suburb. The word chooses gradual loss of childhood, not a dramatic break.</li>
+<li><b>“allotments”</b> — small rented vegetable plots; grounded, working-class, English. Duffy plants the girl in an ordinary, muddy reality <i>before</i> the myth begins, so the woods feel like a real turning point, not a fantasy.</li>
+<li><b>“clapped eyes on”</b> — coarse, colloquial idiom. The fairy tale has the wolf see Red; here the girl “claps eyes on” him. The casual verb hands her the gaze — and therefore the agency — in a single phrase.</li>
+<li><b>“drawl”</b> — slow, elongated speech; the sound of the word mimics the slowed, lazy voice. It makes the wolf seductive and relaxed, not threatening. Diction encodes desire.</li>
+<li><b>“sweet sixteen”</b> — a stock phrase for the nubile girl; “sweet” is ironic the moment the wolf buys her a drink. The cliché is loaded with innocence the poem is about to dismantle.</li>
+<li><b>“never been”</b> — three words of innuendo (virgin / never been with a man). Compressed slang does in three syllables what a paragraph would: the wolf’s grooming, stated by the girl herself.</li>
+<li><b>“babe, waif”</b> — endearments that also mean helpless dependents. The wolf’s pet names are a way of making her small; she quotes them knowingly, turning the diminishment into irony.</li>
+<li><b>“better beware”</b> — a direct echo of the tale’s warning rhyme. The speaker quotes it <i>and walks on</i>; the repeated formula is now ironic, because she is not the one who needs warning.</li>
+<li><b>“thrashing”</b> — violent, helpless movement; also slang for “failing”. The wolf is both animal and a joke, alive and out of control, at once.</li>
+<li><b>“matted”</b> — tangled, unkempt; pure animality. Set against the “paperback in his hairy paw”, it measures the gap between the beast and the book — the two things he offers her.</li>
+<li><b>“crimson, gold”</b> — regal, precious colours. The wall of books is a treasury; “crimson” also carries blood, so even the treasure keeps the wound in view.</li>
+<li><b>“aglow”</b> — radiant, alive, giving off light. The books are personified as a source of warmth and life; language literally illuminates the dark lair.</li>
+<li><b>“stoppers”</b> — a verb (a mushroom “stoppers” a corpse’s mouth). Precise and gruesome: the bodily image makes death intimate and physical, not abstract.</li>
+<li><b>“uttered”</b> — spoken aloud. “Birds are the uttered thought of trees” fuses speech, nature and poetry; the word insists that thinking is a kind of speaking, and speaking is the poem’s real subject.</li>
+<li><b>“glistening, virgin white”</b> — an oxymoron: “glistening” is wet and bodily, “virgin white” is pure and clean. The grandmother’s bones appear as female victimhood made visible — the cost of the wolf’s story.</li>
+<li><b>“stitched”</b> — sewing, a domestic female craft. She closes the wolf’s belly herself; the needle, once a symbol of passive womanhood, becomes an instrument of her agency. The girlish “blazer” and the woman’s “stitch” bracket the transformation.</li>
+<li><b>“scrotum to throat”</b> — clinical, descending anatomical sweep. Blunt body-words refuse prettiness; the castration is stated without flinching, which is exactly the point — she owns the violence now.</li>
+<li><b>“flowers”</b> — the final emblem: her own poems / voice carried out, but also funeral flowers. Closure is survival <i>and</i> mourning.</li>
+</ul>
+</div>
+<p><b>Extend it:</b> pick any line not listed and find its three most loaded words. For each, ask: denotation? connotation? register? sound? why this word and not a synonym? That is close reading.</p>
+
+<h3>10 · Sound &amp; Phonetic Texture</h3>
+<p>What the poem <b>sounds</b> like is part of what it means.</p>
+<ul>
+<li><b>Sibilance</b> — “silent… stocks… stones… stitched” threads a soft, snake-like <i>s</i> through the killing; the sound is soothing and sinister at once.</li>
+<li><b>Plosives &amp; hard consonants</b> — “chop”, “throat”, “bite”, “dead”, “red” are abrupt, stop sounds; they <i>are</i> the sudden acts they name.</li>
+<li><b>Half-rhyme &amp; rhyme</b> — “girl / wolf”, “rhyme / reason”, “red / bed”, “there / beware” keep a nursery-rhyme music under the adult content; the form mocks the tale even as it retells it.</li>
+<li><b>Onomatopoeia</b> — “thrashing”, “crawled”, “leapt”, “wept” make the body move on the page.</li>
+<li><b>The one-word line “Poetry.”</b> — isolated between longer lines, it is forced to resonate; the silence around it is the point.</li>
+</ul>
+
+<h3>11 · Diction, Register &amp; Syntax</h3>
+<ul>
+<li><b>Register mixing</b> — elevated fairy-tale diction (“At childhood’s end”) sits next to slang (“babe, waif”, “never been”), colloquial speech (“my first”) and literary words (“uttered”, “aglow”). The clash is deliberate: it keeps the poem modern, ironic and subversive, and it aligns us with a knowing adult, not an innocent child.</li>
+<li><b>Sentence types</b> — mostly declarative narrative; a rhetorical question (“what little girl doesn’t dearly love a wolf?”) implicates the reader; an imperative echo (“better beware”) recalls the tale’s voice; a one-word sentence (“Poetry.”) delivers the epiphany. The variety is a sign of a controlled, confident speaker.</li>
+<li><b>Grammar as argument</b> — watch who is subject and who is object. Early, “I crawled in his wake” (she follows); late, “I took an axe to the wolf” (she acts). The shift from object to subject is enacted in the syntax itself.</li>
+</ul>
+
+<h3>12 · The Speaker’s Psychological Arc</h3>
+<p>The “I” is an adult narrator looking back with irony. Three things to notice:</p>
+<ul>
+<li><b>Hindsight &amp; irony</b> — she knows the ending; her witty, gleeful tone (e.g. “How nice, breakfast in bed”) comes from distance. The irony is a mark of survival, not coldness.</li>
+<li><b>From object to subject, prey to poet</b> — she begins as the tale’s victim-in-waiting and ends as the one who writes. The poem is her self-authorship.</li>
+<li><b>Unreliability / candour</b> — she is frank, even proud, about desire (“what little girl doesn’t dearly love a wolf?”). That candour destabilises the innocent-child reading the examiner might expect, and is exactly why Duffy’s Red is radical.</li>
+<li><b>The woods as the unconscious</b> — “ten years in the woods” figures growing up as slow, embodied experience; the forest is life, not a mere setting.</li>
+</ul>
+
+<h3>13 · Wider Context</h3>
+<div class="card">
+<ul>
+<li><b>The World’s Wife (1999)</b> — Duffy’s sequence gives voice to women erased or silenced by myth and history (Mrs Midas, Mrs Darwin, Demeter, Frau Freud…). “Little Red-Cap” opens the book, setting its twin themes: female desire and female voice.</li>
+<li><b>Fairy-tale intertexts</b> — Perrault’s moralising red hood, the Brothers Grimm’s huntsman-and-stones, and the broader “animal bridegroom / Bluebeard” tradition. Duffy rewrites the “girl meets beast” initiation tale so the girl, not the rescuer, acts.</li>
+<li><b>Feminist reading</b> — the wolf is predatory masculinity <i>and</i> the (male) poet-teacher; the girl’s seizure of language is emancipation. The knife (or axe) is matched by the pen.</li>
+<li><b>Open question for essays</b> — is the ending triumph or loneliness? “all alone” can read as hard-won autonomy <i>or</i> as isolation. Strong essays hold both.</li>
+</ul>
+</div>
+
+<h3>14 · Exam Strategy — The “Word Hunt” Drill</h3>
+<p>For Paper 2 and the Individual Oral, practise this on any stanza:</p>
+<div class="card">
+<p><b>Step 1</b> — Underline the three most loaded words. <br><b>Step 2</b> — For each, answer: denotation? connotation? register? sound? why this word, not a synonym? <br><b>Step 3</b> — Link each to a theme, a device, and the global issue. <br><b>Step 4</b> — Write one paragraph: claim → the exact word → the method → the effect → context.</p>
+<p><b>Worked example —</b> “my stockings ripped to shreds, scraps of red from my blazer / snagged on twig and branch, murder clues.” <br><i>“ripped”</i> (violent, sudden) + <i>“red”</i> (hood and blood) + <i>“murder clues”</i> (the trail she leaves) together flip the fairy tale: in the original she is eaten, here she survives and leaves the evidence — a feminist subversion encoded in three words.</p>
+<p><b>Analytical verbs to use:</b> connotes, juxtaposes, undercuts, reclaims, figures, encodes, animates, destabilises, personifies, parodies.</p>
+</div>
+
+<h3>15 · Quick Reference — Theme × Device × Quotation</h3>
+<table style="width:100%;border-collapse:collapse;font-size:14px;">
+<thead><tr><th style="border:1px solid #e5d3d3;padding:6px 8px;text-align:left;background:#fbf3f3;">Theme</th><th style="border:1px solid #e5d3d3;padding:6px 8px;text-align:left;background:#fbf3f3;">Device</th><th style="border:1px solid #e5d3d3;padding:6px 8px;text-align:left;background:#fbf3f3;">Quotation</th></tr></thead>
+<tbody>
+<tr><td style="border:1px solid #e5d3d3;padding:6px 8px;vertical-align:top;">Agency / the gaze</td><td style="border:1px solid #e5d3d3;padding:6px 8px;vertical-align:top;">Intertextuality / reversal</td><td style="border:1px solid #e5d3d3;padding:6px 8px;vertical-align:top;">“It was there that I first clapped eyes on the wolf.”</td></tr>
+<tr><td style="border:1px solid #e5d3d3;padding:6px 8px;vertical-align:top;">Literature as salvation</td><td style="border:1px solid #e5d3d3;padding:6px 8px;vertical-align:top;">Personification / symbol</td><td style="border:1px solid #e5d3d3;padding:6px 8px;vertical-align:top;">“a whole wall was crimson, gold, aglow with books.”</td></tr>
+<tr><td style="border:1px solid #e5d3d3;padding:6px 8px;vertical-align:top;">Loss of innocence</td><td style="border:1px solid #e5d3d3;padding:6px 8px;vertical-align:top;">Slang / innuendo</td><td style="border:1px solid #e5d3d3;padding:6px 8px;vertical-align:top;">“sweet sixteen, never been, babe, waif”</td></tr>
+<tr><td style="border:1px solid #e5d3d3;padding:6px 8px;vertical-align:top;">Maturity / experience</td><td style="border:1px solid #e5d3d3;padding:6px 8px;vertical-align:top;">Metaphor / time</td><td style="border:1px solid #e5d3d3;padding:6px 8px;vertical-align:top;">“it took ten years in the woods”</td></tr>
+<tr><td style="border:1px solid #e5d3d3;padding:6px 8px;vertical-align:top;">Revenge / autonomy</td><td style="border:1px solid #e5d3d3;padding:6px 8px;vertical-align:top;">Anaphora / caesura</td><td style="border:1px solid #e5d3d3;padding:6px 8px;vertical-align:top;">“I took an axe to… one chop, scrotum to throat”</td></tr>
+<tr><td style="border:1px solid #e5d3d3;padding:6px 8px;vertical-align:top;">Survival / voice</td><td style="border:1px solid #e5d3d3;padding:6px 8px;vertical-align:top;">Closing image</td><td style="border:1px solid #e5d3d3;padding:6px 8px;vertical-align:top;">“Out of the forest I come with my flowers, singing, all alone.”</td></tr>
+</tbody>
+</table>
+`
+  },
+  {
+    id:"medusa",
+    title:"Medusa",
+    author:"Carol Ann Duffy (b. 1955)",
+    context:"From <i>The World's Wife</i> (1999). A dramatic monologue in the voice of the Gorgon Medusa, reworking the classical myth as a poem about jealousy, betrayal and the male gaze.",
+    text:`Medusa
+
+A suspicion, a doubt, a jealousy
+grew in my mind,
+which turned the hairs on my head to filthy snakes
+as though my thoughts
+hissed and spat on my scalp.
+
+My bride’s breath soured, stank
+in the grey bags of my lungs.
+I’m foul mouthed now, foul tongued,
+yellow fanged.
+There are bullet tears in my eyes.
+Are you terrified?
+
+Be terrified.
+It’s you I love,
+perfect man, Greek God, my own;
+but I know you’ll go, betray me, stray
+from home.
+So better by far for me if you were stone.
+
+I glanced at a buzzing bee,
+a dull grey pebble fell
+to the ground.
+I glanced at a singing bird,
+a handful of dusty gravel
+spattered down.
+
+I looked at a ginger cat,
+a housebrick
+shattered a bowl of milk.
+I looked at a snuffling pig,
+a boulder rolled
+in a heap of shit.
+
+I stared in the mirror.
+Love gone bad
+showed me a Gorgon.
+I stared at a dragon.
+Fire spewed
+from the mouth of a mountain.
+
+And here you come
+with a shield for a heart
+and a sword for a tongue
+and your girls, your girls.
+Wasn’t I beautiful
+Wasn’t I fragrant and young?
+
+Look at me now.`,
+    keyPassages:[
+      {text:"A suspicion, a doubt, a jealousy", note:"The poem opens on three abstract nouns in a list (a triad). 'Suspicion', 'doubt' and 'jealousy' are the seeds of the whole monologue — the speaker names the feelings that will grow into the monster. Duffy begins with the inner cause, not the outward myth."},
+      {text:"which turned the hairs on my head to filthy snakes", note:"The central metamorphosis, stated as cause and effect. 'filthy' carries disgust; the snakes are not mythical splendour but revulsion made physical. The line turns a classical legend into a story about polluted thought."},
+      {text:"hissed and spat on my scalp.", note:"Personification of thought: ideas behave like snakes. 'hissed' and 'spat' are sibilant, violent verbs that make the mind itself aggressive. The scalp is where the snakes sit, so the horror is worn on the body."},
+      {text:"My bride’s breath soured, stank", note:"'bride's' reveals the speaker is married to the man she addresses — the jealousy is domestic, not mythical. 'soured' and 'stank' are disgusted sense-words; love has rotted into something the body rejects."},
+      {text:"in the grey bags of my lungs.", note:"A startling image: the lungs as 'grey bags' holding sour breath. The clinical, ugly word 'bags' undercuts any romance; the speaker's own body is filling with poison she names."},
+      {text:"I’m foul mouthed now, foul tongued,", note:"Alliteration ('foul ... foul') and doubling show the change is in her speech. 'foul mouthed / foul tongued' means she curses and speaks venom — the Gorgon's power lives in the tongue, linking poison words to the petrifying gaze."},
+      {text:"yellow fanged.", note:"A short, isolated line like a snap. 'yellow' suggests decay and animal savagery; 'fanged' makes the human speaker bestial. The abrupt stop mimics a snarl."},
+      {text:"There are bullet tears in my eyes.", note:"An oxymoron and a metaphor: tears are soft, bullets are hard and lethal. The image says her weeping is weaponised, dangerous to look at — a quiet echo of the deadly gaze to come."},
+      {text:"Are you terrified?", note:"The first direct address to the 'you' (the lover). A rhetorical question that invites fear; the dramatic-monologue form means we hear her speaking at him, turning the reader into the accused."},
+      {text:"Be terrified.", note:"An imperative, colder and more threatening than the question. The move from question to command shows her power over the listener; the two-word line lands like a verdict."},
+      {text:"perfect man, Greek God, my own;", note:"Irony and bitter endearment. She calls him a 'Greek God' even as she accuses him, so the idealisation is exposed as the trap that made the betrayal hurt. 'my own' claims possession the poem will undo."},
+      {text:"but I know you’ll go, betray me, stray", note:"A tricolon (three parallel verbs: go, betray, stray) building momentum. 'stray' recalls a domestic animal leaving home; the certainty ('I know') shows trust is already destroyed by suspicion."},
+      {text:"So better by far for me if you were stone.", note:"The Gorgon's wish stated plainly: if he were stone he could not leave. The line fuses the myth (men turned to stone) with a wounded lover's logic — petrification as a perverse form of keeping him."},
+      {text:"a dull grey pebble fell", note:"The first of the petrifying 'glances'. 'dull grey' is the opposite of the bee's life; the living thing becomes dead weight. The verb 'fell' is quiet, almost casual, which makes the transformation eerie."},
+      {text:"a handful of dusty gravel", note:"The bird becomes 'dusty gravel' — again life collapses into inert matter. 'dusty' suggests something long dead and forgotten; the repeated pattern (glance -> stone) builds a rhythm of loss."},
+      {text:"shattered a bowl of milk.", note:"The cat 'shattered a bowl of milk' — domestic ruin. Milk (nourishment, the home) breaks; the petrifying glance destroys the ordinary, gentle things of married life, not just beasts."},
+      {text:"in a heap of shit.", note:"The pig becomes a 'boulder' in 'a heap of shit' — the comic-grotesque low point. Duffy's scatological humour deflates the myth; the curse is as much farce as horror, and the disgust is aimed at the world."},
+      {text:"showed me a Gorgon.", note:"The mirror reveals 'a Gorgon' — she sees herself as the monster. 'Love gone bad' personified as the thing that shows her; self-recognition is the poem's emotional pivot. The myth turns inward."},
+      {text:"from the mouth of a mountain.", note:"The dragon's fire 'spewed from the mouth of a mountain' — a volcano. The image scales her personal rage up to the geological; 'spewed' links her 'foul mouthed' venom to the earth's violence."},
+      {text:"with a shield for a heart", note:"Metaphor: his 'shield' is emotional armour against her. The heart that should feel is replaced by defence; he is protected from love, which is why he can leave. The military image frames the relationship as war."},
+      {text:"and a sword for a tongue", note:"Metaphor extended: his 'tongue' is a 'sword' — his words wound or cut. Speech as weapon echoes her 'foul tongued' poison; both characters fight with language, not just looks."},
+      {text:"and your girls, your girls.", note:"Repetition ('your girls, your girls') conveys obsession and accusation. The doubled phrase sounds like a stuck, resentful chant; the 'girls' are the rivals who explain his betrayal and her rage."},
+      {text:"Wasn’t I beautiful", note:"A rhetorical question full of pathos. 'Wasn't I' demands agreement and mourns a lost self; the beauty she names is what he supposedly loved and abandoned. The line humanises the monster."},
+      {text:"Look at me now.", note:"The closing imperative is the poem's thesis. 'Look at me' is both a demand to witness her ruined power and a trap — to look at a Gorgon is to be petrified. The ending dares the reader/lover to meet her gaze."},
+    ],
+    vocab:[
+      {word:"suspicion",ex:"A suspicion, a doubt, a jealousy"},
+      {word:"jealousy",ex:"A suspicion, a doubt, a jealousy"},
+      {word:"filthy",ex:"to filthy snakes"},
+      {word:"soured",ex:"My bride’s breath soured, stank"},
+      {word:"foul mouthed",ex:"I’m foul mouthed now, foul tongued"},
+      {word:"fanged",ex:"yellow fanged."},
+      {word:"bullet tears",ex:"There are bullet tears in my eyes."},
+      {word:"terrified",ex:"Are you terrified?"},
+      {word:"betray",ex:"you’ll go, betray me, stray"},
+      {word:"stray",ex:"betray me, stray from home."},
+      {word:"gravel",ex:"a handful of dusty gravel"},
+      {word:"snuffling",ex:"a snuffling pig"},
+      {word:"boulder",ex:"a boulder rolled"},
+      {word:"Gorgon",ex:"showed me a Gorgon."},
+      {word:"spewed",ex:"Fire spewed"},
+      {word:"shield",ex:"with a shield for a heart"},
+      {word:"fragrant",ex:"Wasn’t I fragrant and young?"},
+      {word:"dramatic monologue",ex:"a Gorgon speaking to her lover"},
+      {word:"anaphora",ex:"I glanced... I glanced... I looked..."},
+      {word:"intertextuality",ex:"the classical myth of Medusa"},
+      {word:"sibilance",ex:"suspicion... soured... stank"},
+      {word:"personification",ex:"Love gone bad showed me a Gorgon"},
+      {word:"oxymoron",ex:"bullet tears"},
+      {word:"free verse",ex:"no fixed rhyme or metre"},
+    ],
+    analysis:`<h3>1 · Context & Big Picture</h3>
+<p><b>Medusa</b> is a poem in Carol Ann Duffy's <i>The World's Wife</i> (1999), the same collection that opens with "Little Red-Cap". Where that poem gave voice to a fairy-tale girl, "Medusa" gives voice to one of myth's most famous monsters. Duffy writes a <b>dramatic monologue</b> in the first person, spoken by Medusa herself to the man who has betrayed her.</p>
+<div class="card"><b>The single most important idea:</b> the Gorgon is not born a monster — she is made one by <b>jealousy, suspicion and betrayal</b>. Duffy turns an ancient myth of a petrifying female monster into a modern poem about a wounded woman whose love "went bad". The horror is psychological before it is mythical.</div>
+
+<h3>2 · Speaker, Voice & Tone</h3>
+<p>The speaker is Medusa, but a recognisably human, betrayed wife. The <b>register</b> slides between elevated myth ("Greek God", "Gorgon", "dragon") and blunt, domestic disgust ("a heap of shit", "foul mouthed"). This mixing is deliberate: it keeps the monster grounded in everyday resentment.</p>
+<p><b>Tone:</b> accusing → menacing → self-pitying → defiant. Notice how tenderness ("It's you I love") sits directly beside threat ("Be terrified.").</p>
+
+<h3>3 · Key Themes</h3>
+<h4>① Jealousy, suspicion & the corrupted mind</h4>
+<ul><li>The poem begins inside the speaker's head: "A suspicion, a doubt, a jealousy / grew in my mind". Thought itself breeds the monster.</li>
+<li>The snakes are "filthy" — the corruption is moral and physical at once.</li></ul>
+<h4>② Betrayal & the end of love</h4>
+<ul><li>She addresses "you", the faithful-now-unfaithful man: "but I know you'll go, betray me, stray".</li>
+<li>"Love gone bad / showed me a Gorgon" — love's failure produces the monster.</li></ul>
+<h4>③ The male gaze reversed / the petrifying gaze</h4>
+<ul><li>In myth, men look at Medusa and turn to stone; here she looks and <i>others</i> turn to stone ("I glanced at a buzzing bee, / a dull grey pebble fell").</li>
+<li>The final "Look at me now" dares the reader to meet the deadly gaze — the power flips to her.</li></ul>
+<h4>④ Disgust, bodily decay & self-loathing</h4>
+<ul><li>"My bride's breath soured, stank"; "I'm foul mouthed now, foul tongued". The body betrays her too.</li>
+<li>The mirror shows "a Gorgon" — she sees herself as monstrous.</li></ul>
+<h4>⑤ Lost beauty & pathos</h4>
+<ul><li>"Wasn't I beautiful / Wasn't I fragrant and young?" — beneath the monster is a grieving woman.</li></ul>
+
+<h3>4 · Poetic Devices — A Deep Dive</h3>
+<p>DP examiners reward close technical reading. Below, the main devices are unpacked with <b>exact lines to quote</b> and a note on <b>effect</b>.</p>
+
+<h4>① Intertextuality — the classical Medusa myth</h4>
+<ul>
+<li>The poem rewrites the Greek myth: Medusa, whose gaze turned onlookers to stone, here speaks as a wronged wife. Spot the echoes: the "snakes" in her hair, the petrifying "glance", the "Gorgon" of the mirror, and "from the mouth of a mountain" (the dragon / Medusa's lethal breath).</li>
+<li><b>Why it matters:</b> Duffy changes the <i>point of view</i>. The monster is given a human motive (betrayal), so the myth becomes an allegory of jealous love. The intertext is what makes her rage legible as heartbreak.</li>
+</ul>
+
+<h4>② Anaphora & parallel structure (the "glance" sequence)</h4>
+<ul>
+<li><b>Anaphora</b> — repeated sentence openings: "I glanced at a buzzing bee", "I glanced at a singing bird", "I looked at a ginger cat", "I looked at a snuffling pig", "I stared in the mirror", "I stared at a dragon". The repeated "I glanced / I looked / I stared" builds a chant-like rhythm of accumulating destruction.</li>
+<li>Each clause follows the same shape: <i>look → thing becomes stone</i>. The parallelism makes the petrifying power feel mechanical, inevitable, cumulative.</li>
+<li><b>Effect:</b> the form enacts obsession — the speaker cannot stop looking, and the reader cannot stop watching the world turn to rock.</li>
+</ul>
+
+<h4>③ Enjambment, caesura & line breaks</h4>
+<ul>
+<li><b>Enjambment</b> (line runs on): "I glanced at a buzzing bee, / a dull grey pebble fell / to the ground." pulls the eye down the page like the falling stone.</li>
+<li><b>Short, isolated lines</b>: "yellow fanged." and "Be terrified." — the full stops are hard punches; the isolation makes each word snap.</li>
+<li><b>Effect:</b> the form feels like talking, not performing — which is why the accusing, intimate voice sounds convincing.</li>
+</ul>
+
+<h4>④ Metre & rhythm (prosody)</h4>
+<ul>
+<li>The poem is <b>free verse</b> (no fixed metre or rhyme), but Duffy uses a strong, speech-driven pulse. The "glance" sequence has a regular two-beat hammer rhythm that mimics the things dropping and shattering.</li>
+<li>The rhetorical questions "Wasn't I beautiful / Wasn't I fragrant and young?" have a plaintive, song-like lift that contrasts the earlier menace.</li>
+</ul>
+
+<h4>⑤ Other devices to quote</h4>
+<ul>
+<li><b>Metaphor & symbol</b> — the "shield for a heart" and "sword for a tongue" figure the lover as armoured and weaponised; stone = frozen love / possession; the "mirror" = self-knowledge.</li>
+<li><b>Personification</b> — "Love gone bad / showed me a Gorgon"; thoughts "hissed and spat".</li>
+<li><b>Oxymoron</b> — "bullet tears" (soft grief made lethal).</li>
+<li><b>Sibilance</b> — "suspicion… soured, stank"; "hissed and spat" threads a snake-like <i>s</i> through the corruption.</li>
+<li><b>Alliteration</b> — "foul mouthed… foul tongued"; the doubled <i>f</i> mimics the snarl.</li>
+<li><b>Tricolon</b> — "go, betray me, stray" builds accusatory momentum.</li>
+</ul>
+
+<h3>5 · Structure</h3>
+<p>Free verse, loosely in six movement-like blocks. The poem moves: <b>inner cause</b> (suspicion grows) → <b>bodily corruption</b> (breath, fangs) → <b>threat to the lover</b> (terrified / stone) → <b>the catalogue of petrifactions</b> (bee, bird, cat, pig) → <b>self-recognition</b> (the mirror, the dragon) → <b>confrontation</b> ("And here you come… Look at me now"). The middle catalogue is the poem's engine: a repeated pattern that escalates from small creatures to the self.</p>
+
+<h3>6 · How to Use This for Your IB Essay</h3>
+<div class="card">
+<p><b>Thesis starters you could develop:</b></p>
+<ul>
+<li>"In <i>Medusa</i>, Duffy rewrites a classical myth as a dramatic monologue of betrayed love, figuring the Gorgon's petrifying gaze as the psychological effect of jealousy rather than innate monstrosity."</li>
+<li>"Duffy's anaphoric 'glance' sequence enacts obsession through form: the repeated 'I glanced / I looked / I stared' turns the speaker's perceptions into an accumulating, mechanical destruction."</li>
+<li>"The poem's shift between elevated myth ('Greek God', 'Gorgon', 'dragon') and crude domestic disgust ('a heap of shit') aligns the reader with a speaker who is monstrous and pitiable at once."</li>
+</ul>
+<p><b>Pairing idea (for comparative essay):</b> set "Medusa" against "Little Red-Cap" (same collection) — both give voice to silenced female figures and rewrite a received story from the woman's point of view. Global issue: <i>"Power and privilege"</i> or <i>"Identity and belonging"</i>.</p>
+</div>
+
+<h3>7 · Examiner-Style Guiding Questions</h3>
+<p>Use these to test yourself for Paper 2 and the Individual Oral. Answer out loud first, then in writing with two quoted lines each.</p>
+<div class="card">
+<ul>
+<li><b>Monologue & voice:</b> Why does Duffy give Medusa a first-person voice? What does the direct address ("Are you terrified?") do to the reader?</li>
+<li><b>Intertextuality:</b> Pick one echo of the Greek myth. How does giving the monster a human motive reshape its meaning?</li>
+<li><b>Form:</b> Why free verse? How does the repeated "I glanced / I looked / I stared" structure carry the poem's argument?</li>
+<li><b>Symbol:</b> What does "stone" represent — death, possession, frozen love, or all three? Defend with one line.</li>
+<li><b>Register:</b> How do mythic words ("Gorgon", "Greek God") sit beside gross ones ("a heap of shit")? What does the clash reveal about the speaker?</li>
+<li><b>Global issue:</b> Which IB "global issue" fits best — "Power and privilege", "Identity and belonging", or "Beliefs and values"? Defend it with one line.</li>
+</ul>
+</div>
+
+<h3>8 · Model Paragraph — Structure</h3>
+<p>If you write one paragraph on <b>the petrifying gaze as metaphor</b>, a strong shape is: <b>Point → Evidence (2 lines) → Method (name the device) → Effect → Context</b>.</p>
+<div class="card">
+<p>Opener you could adapt: <i>"Duffy turns the mythic curse into a metaphor for jealousy's destructiveness: 'I glanced at a buzzing bee, / a dull grey pebble fell / to the ground' shows the speaker's look draining life from the world, so the Gorgon's power figures a mind consumed by suspicion."</i></p>
+</div>
+
+<h3>9 · Close Reading — "Every Word Is Chosen"</h3>
+<p>Your teacher's point is the single most useful habit for this poem: Duffy never wastes a word. The IB markscheme rewards "precise textual references" and "close reading", which means showing <b>why this exact word</b> and not a synonym. Below, loaded words are unpacked one at a time. Treat the list as a drill, not a limit — you should be able to do this for any line.</p>
+<div class="card">
+<ul>
+<li><b>"suspicion, a doubt, a jealousy"</b> — a triad of abstract nouns. The listing makes the feeling build; "jealousy" is placed last as the climax, the emotion that will become the monster. Duffy starts with cause (the mind) before effect (the snakes).</li>
+<li><b>"grew"</b> — a verb of organic growth; the monster is planted like a seed in her thoughts, not inflicted from outside. The word chooses slow, internal corruption over sudden curse.</li>
+<li><b>"filthy"</b> — loaded with disgust; the snakes are not awe-inspiring but repulsive. It collapses the grand myth into something shameful and bodily.</li>
+<li><b>"hissed and spat"</b> — sibilant verbs personifying thought as a snake. The sound of the words mimics the snake; the aggression is located in the mind itself.</li>
+<li><b>"bride's"</b> — the single word that domesticates the myth: this Gorgon is a married woman. Betrayal is conjugal, not legendary.</li>
+<li><b>"soured, stank"</b> — two blunt sense-verbs of decay. "soured" is taste, "stank" is smell; the love has become physically intolerable to her own body.</li>
+<li><b>"grey bags"</b> — "bags" is a deliberately unpoetic, clinical word for lungs; the body is reduced to sacks of poison. The plain diction undercuts any romance.</li>
+<li><b>"foul mouthed… foul tongued"</b> — alliterative doubling. The repetition insists the change is in her speech; the "tongue" links cursing to the petrifying gaze — words as venom.</li>
+<li><b>"yellow fanged"</b> — "yellow" connotes decay and animal savagery; "fanged" makes the human bestial. The isolated line is a snarl.</li>
+<li><b>"bullet tears"</b> — an oxymoron: tears are weak, bullets kill. The grief is weaponised, dangerous to witness — a quiet preview of the deadly gaze.</li>
+<li><b>"Be terrified"</b> — an imperative, two words, no subject. The command form gives her power over the listener; the hard <i>t</i> sounds are staccato and cold.</li>
+<li><b>"Greek God"</b> — ironic idealisation. Calling the faithless man a god exposes the trap of worship that made the betrayal hurt; the capitalisation mocks the comparison.</li>
+<li><b>"betray me, stray"</b> — "stray" recalls a domestic animal leaving home; the tricolon "go, betray me, stray" accelerates accusation. The certainty ("I know") shows trust already dead.</li>
+<li><b>"if you were stone"</b> — "stone" is the poem's key symbol: petrification as a perverse way to keep him, to stop him leaving. The subjunctive "if" reveals wish, not fact — she longs to freeze love.</li>
+<li><b>"dull grey pebble"</b> — the first petrifaction. "dull grey" is the antithesis of the bee's life; "pebble" is small and trivial, so the transformation feels eerily casual, not epic.</li>
+<li><b>"dusty gravel"</b> — "dusty" implies long-dead, forgotten matter. The bird's song becomes inert dust; the pattern (glance → stone) accumulates loss.</li>
+<li><b>"a heap of shit"</b> — scatological, comic-grotesque. The pig's fate is farce as much as horror; Duffy's disgust is aimed at the whole fallen world, and the vulgarity shocks the mythic register.</li>
+<li><b>"Gorgon"</b> — the mirror's revelation. The word she uses for herself is the myth's name for the monster; self-knowledge arrives as self-loathing.</li>
+<li><b>"mouth of a mountain"</b> — a volcano. Scaling her personal "fire" to geology makes the rage elemental; "spewed" (also her "foul mouthed" venom) links her to the earth's violence.</li>
+<li><b>"shield for a heart"</b> — metaphor: emotional armour. The heart that should feel is replaced by defence, explaining why he can leave untouched.</li>
+<li><b>"sword for a tongue"</b> — metaphor extended: his words wound. Speech as weapon answers her "foul tongued" poison; both fight with language.</li>
+<li><b>"your girls, your girls"</b> — repetition as a stuck, resentful chant. The doubled phrase conveys obsession with the rivals who explain his betrayal.</li>
+<li><b>"fragrant and young"</b> — "fragrant" (sweet-smelling) pairs with "young" to evoke lost innocence and desirability; the rhetorical question mourns the self he abandoned.</li>
+<li><b>"Look at me now"</b> — imperative close and the poem's thesis. "Look at me" demands witness and is a trap — to meet a Gorgon's gaze is to be petrified. The ending dares the reader to look.</li>
+</ul>
+</div>
+<p><b>Extend it:</b> pick any line not listed and find its three most loaded words. For each, ask: denotation? connotation? register? sound? why this word and not a synonym? That is close reading.</p>
+
+<h3>10 · Sound & Phonetic Texture</h3>
+<p>What the poem <b>sounds</b> like is part of what it means.</p>
+<ul>
+<li><b>Sibilance</b> — "suspicion… soured, stank", "hissed and spat", "grey bags" threads a snake-like <i>s</i> through corruption and the snakes themselves; the sound is soothing and sinister at once.</li>
+<li><b>Alliteration</b> — "foul mouthed… foul tongued", "bullet… beautiful" repeat consonants to bind ideas (venom; pathos).</li>
+<li><b>Plosives</b> — "be", "terrified", "betray", "stone", "shattered" are abrupt stop sounds that <i>are</i> the sudden petrifactions they name.</li>
+<li><b>Hard consonants in the catalogue</b> — "brick", "boulder", "spattered", "shattered" make the things fall and break on the ear.</li>
+<li><b>The isolated two-word lines</b> — "Be terrified.", "yellow fanged.", "Look at me now." — forced into silence, they resonate; the pause around them is the point.</li>
+</ul>
+
+<h3>11 · Diction, Register & Syntax</h3>
+<ul>
+<li><b>Register mixing</b> — elevated myth ("Greek God", "Gorgon", "dragon", "mountain") sits next to crude domestic grossness ("a heap of shit", "foul mouthed", "grey bags"). The clash keeps the monster human and the poem modern, ironic, unsettling.</li>
+<li><b>Sentence types</b> — mostly declarative; rhetorical questions ("Are you terrified?", "Wasn't I beautiful") implicate the listener/reader; imperatives ("Be terrified.", "Look at me now.") assert her power; the anaphoric "I glanced / I looked / I stared" builds a ritual chant. The variety signals a controlled, accusing speaker.</li>
+<li><b>Grammar as argument</b> — watch the repeated subject "I" in the petrifying catalogue: she is the active agent of destruction, reversing the myth where she is the passive object of the male gaze. The syntax enacts her stolen power.</li>
+</ul>
+
+<h3>12 · The Speaker's Psychological Arc</h3>
+<p>The "I" is a betrayed wife who has become the monster she names. Three things to notice:</p>
+<ul>
+<li><b>From victim to agent</b> — in the myth men are petrified by looking at her; here she does the looking and the petrifying. The catalogue makes her the active subject, not the object of the gaze.</li>
+<li><b>Self-loathing & pathos</b> — "Love gone bad / showed me a Gorgon" and "Wasn't I beautiful" show she mourns the self the betrayal destroyed. The monster is also a grieving woman.</li>
+<li><b>Menace and tenderness together</b> — "It's you I love" sits beside "Be terrified." The co-existence is what makes her radical: love and threat are the same feeling turned strange.</li>
+<li><b>The mirror as the unconscious</b> — "I stared in the mirror" figures self-knowledge as the moment she sees the truth of what jealousy made her.</li>
+</ul>
+
+<h3>13 · Wider Context</h3>
+<div class="card">
+<ul>
+<li><b>The World's Wife (1999)</b> — Duffy's sequence gives voice to women erased or silenced by myth and history. "Medusa" sits among "Little Red-Cap", "Mrs Midas", "Mrs Darwin" and others; together they ask what the female experience behind the famous story actually was.</li>
+<li><b>The classical intertext</b> — Ovid's Medusa, punished by Athena and used by Perseus, is here rewritten from her own mouth. Duffy refuses the victim/monster binary and gives her a motive.</li>
+<li><b>Feminist reading</b> — the petrifying gaze becomes a metaphor for how jealousy and betrayal "freeze" a person; the male lover is armoured ("shield for a heart", "sword for a tongue"), untouchable and weaponised.</li>
+<li><b>Open question for essays</b> — is the ending triumph or tragedy? "Look at me now" can read as defiant power <i>or</i> as a cry from a ruined woman. Strong essays hold both.</li>
+</ul>
+</div>
+
+<h3>14 · Exam Strategy — The "Word Hunt" Drill</h3>
+<p>For Paper 2 and the Individual Oral, practise this on any stanza:</p>
+<div class="card">
+<p><b>Step 1</b> — Underline the three most loaded words. <br><b>Step 2</b> — For each, answer: denotation? connotation? register? sound? why this word, not a synonym? <br><b>Step 3</b> — Link each to a theme, a device, and the global issue. <br><b>Step 4</b> — Write one paragraph: claim → the exact word → the method → the effect → context.</p>
+<p><b>Worked example —</b> "I glanced at a buzzing bee, / a dull grey pebble fell / to the ground." <br><i>"glanced"</i> (casual, accidental seeing) + <i>"dull grey"</i> (the death of colour and life) + <i>"fell"</i> (quiet, inevitable descent) together show the petrifying gaze as something mundane and unstoppable — jealousy draining the world of life, one glance at a time.</p>
+<p><b>Analytical verbs to use:</b> connotes, juxtaposes, undercuts, reclaims, figures, encodes, animates, destabilises, personifies, parodies.</p>
+</div>
+
+<h3>15 · Quick Reference — Theme × Device × Quotation</h3>
+<table style="width:100%;border-collapse:collapse;font-size:14px;">
+<thead><tr><th style="border:1px solid #e5d3d3;padding:6px 8px;text-align:left;background:#fbf3f3;">Theme</th><th style="border:1px solid #e5d3d3;padding:6px 8px;text-align:left;background:#fbf3f3;">Device</th><th style="border:1px solid #e5d3d3;padding:6px 8px;text-align:left;background:#fbf3f3;">Quotation</th></tr></thead>
+<tbody>
+<tr><td style="border:1px solid #e5d3d3;padding:6px 8px;vertical-align:top;">Jealousy & the mind</td><td style="border:1px solid #e5d3d3;padding:6px 8px;vertical-align:top;">Triad / cause-effect</td><td style="border:1px solid #e5d3d3;padding:6px 8px;vertical-align:top;">"A suspicion, a doubt, a jealousy / grew in my mind"</td></tr>
+<tr><td style="border:1px solid #e5d3d3;padding:6px 8px;vertical-align:top;">Betrayal</td><td style="border:1px solid #e5d3d3;padding:6px 8px;vertical-align:top;">Tricolon / direct address</td><td style="border:1px solid #e5d3d3;padding:6px 8px;vertical-align:top;">"but I know you'll go, betray me, stray"</td></tr>
+<tr><td style="border:1px solid #e5d3d3;padding:6px 8px;vertical-align:top;">The petrifying gaze</td><td style="border:1px solid #e5d3d3;padding:6px 8px;vertical-align:top;">Anaphora / catalogue</td><td style="border:1px solid #e5d3d3;padding:6px 8px;vertical-align:top;">"I glanced at a buzzing bee, / a dull grey pebble fell"</td></tr>
+<tr><td style="border:1px solid #e5d3d3;padding:6px 8px;vertical-align:top;">Self-loathing</td><td style="border:1px solid #e5d3d3;padding:6px 8px;vertical-align:top;">Personification / mirror</td><td style="border:1px solid #e5d3d3;padding:6px 8px;vertical-align:top;">"Love gone bad / showed me a Gorgon."</td></tr>
+<tr><td style="border:1px solid #e5d3d3;padding:6px 8px;vertical-align:top;">Male armour / war</td><td style="border:1px solid #e5d3d3;padding:6px 8px;vertical-align:top;">Metaphor (extended)</td><td style="border:1px solid #e5d3d3;padding:6px 8px;vertical-align:top;">"with a shield for a heart / and a sword for a tongue"</td></tr>
+<tr><td style="border:1px solid #e5d3d3;padding:6px 8px;vertical-align:top;">Lost beauty / pathos</td><td style="border:1px solid #e5d3d3;padding:6px 8px;vertical-align:top;">Rhetorical question</td><td style="border:1px solid #e5d3d3;padding:6px 8px;vertical-align:top;">"Wasn't I beautiful / Wasn't I fragrant and young?"</td></tr>
+</tbody>
+</table>
+`
+  },
+  /* ===================== 2 · Thetis ===================== */
+  {
+    id:"thetis",
+    title:"Thetis",
+    author:"Carol Ann Duffy (b. 1955)",
+    context:"From <i>The World's Wife</i> (1999). Thetis, the sea-nymph and mother of Achilles, speaks of trying to make her mortal son immortal — dipping him in the river Styx — and of watching the Trojan War take him anyway. A mother's grief beneath the Iliad.",
+    text:"（正文待补全 · 请把《Thetis》全诗粘贴给我）",
+    keyPassages:[],
+    vocab:[],
+    analysis:`<h3>1 · Context & Big Picture</h3>
+<p><b>Thetis</b> gives voice to the goddess-mother of Achilles. In the <i>Iliad</i> she tries to make her son immortal (by fire, by the Styx) and fails; he dies at Troy. Duffy's Thetis is a mother who knows the prophecy and cannot save him — the epic of male glory seen from the woman who loses the son.</p>
+<div class="card"><b>The single most important idea:</b> the hero's glory is his mother's grief; Duffy sets the Trojan War underneath a woman's helpless love.</div>
+
+<h3>2 · Speaker, Voice & Tone</h3>
+<p>Majestic, mourning; <b>tone:</b> tender, furious at fate.</p>
+
+<h3>3 · Key Themes</h3>
+<h4>① Motherhood vs destiny</h4>
+<ul><li>She cannot undo the prophecy.</li></ul>
+<h4>② The cost of glory</h4>
+<ul><li>Achilles' fame is her loss.</li></ul>
+
+<h3>4 · Poetic Devices</h3>
+<ul>
+<li><b>Intertext</b> — Homer's <i>Iliad</i>; the Styx immersion.</li>
+<li><b>Dramatic monologue</b> — the mother's forbidden knowledge.</li>
+<li><b>Water / fire imagery</b> — the failed immortality.</li>
+</ul>
+
+<h3>5 · Structure</h3>
+<p>Free verse, from the attempt at immortality to the war's inevitable take.</p>
+
+<h3>6 · How to Use This for Your IB Essay</h3>
+<div class="card">
+<p><b>Thesis starter:</b> "Duffy's Thetis relocates the <i>Iliad</i> from the hero to the mother: Achilles' immortal fame is measured in a goddess's grief she could not avert."</p>
+<p><b>Pairing:</b> with <i>Demeter</i> — mothers who lose daughters/sons to myth. Global issue: <i>"Identity and belonging"</i>.</p>
+</div>
+
+<h3>7 · Examiner-Style Questions</h3>
+<div class="card">
+<ul>
+<li>Why give Thetis the voice Homer denies her?</li>
+<li>What does the failed immortality symbolise?</li>
+</ul>
+</div>
+
+<h3>8 · Close Reading (add once text supplied)</h3>
+<p>When you paste the poem, I will add quote-accurate key-passage notes and a vocab list.</p>`
+  },
+  /* ===================== 3 · Queen Herod ===================== */
+  {
+    id:"queen-herod",
+    title:"Queen Herod",
+    author:"Carol Ann Duffy (b. 1955)",
+    context:"From <i>The World's Wife</i> (1999). A monologue in the voice of the wife of King Herod, who — in the gospel story — ordered the Massacre of the Innocents to kill the baby Jesus. Duffy gives the infanticidal king's wife her own savage, gleeful voice.",
+    text:"（正文待补全 · 请把《Queen Herod》全诗粘贴给我）",
+    keyPassages:[],
+    vocab:[],
+    analysis:`<h3>1 · Context & Big Picture</h3>
+<p><b>Queen Herod</b> rewrites the biblical Massacre of the Innocents from the point of view of Herod's wife. In Matthew's gospel, King Herod murders every male child in Bethlehem to destroy the prophesied "King of the Jews". Duffy's speaker is not repentant — she is complicit, proud, and blackly funny. The poem is a study in how power, class and cruelty entwine.</p>
+<div class="card"><b>The single most important idea:</b> the speaker relishes her husband's violence as a kind of aristocratic entertainment. Duffy uses a royal "we" and a festive register to make state murder feel like a party she hosts.</div>
+
+<h3>2 · Speaker, Voice & Tone</h3>
+<p>The speaker is a queen who speaks with absolute entitlement. <b>Tone:</b> camp, regal, sadistic, witty. She treats the massacre as a household achievement ("my Herod", "our" reign) and as theatre.</p>
+
+<h3>3 · Key Themes</h3>
+<h4>① Power & privilege</h4>
+<ul><li>The royal couple's power is absolute and unaccountable; infants are disposable props in their dynasty.</li></ul>
+<h4>② Complicity of the powerful</h4>
+<ul><li>She is not a bystander — she directs, serves, boasts. Duffy implicates the whole court, not just the king.</li></ul>
+<h4>③ Black comedy & the grotesque</h4>
+<ul><li>The massacre is rhymed, sung, served with wine. The clash of festive form and atrocity content is the poem's engine.</li></ul>
+
+<h3>4 · Poetic Devices</h3>
+<ul>
+<li><b>Register mixing</b> — royal proclamation ("We ordered…") beside nursery rhyme and carol parody.</li>
+<li><b>Anaphora / list</b> — a catalogue of slaughtered children rendered as a gruesome inventory.</li>
+<li><b>Dramatic monologue</b> — the unchecked first person exposes a conscience-free speaker; the reader is forced to "host" the atrocity too.</li>
+<li><b>Intertextuality</b> — echoes of the nativity carol ("noël", "star", "King") twisted into slaughter.</li>
+</ul>
+
+<h3>5 · Structure</h3>
+<p>Free verse with a chant-like, carol-like pulse; stanzas build from invitation ("come") to the body count, then to a chilling closing couplet. The form mimics a festive circular.</p>
+
+<h3>6 · How to Use This for Your IB Essay</h3>
+<div class="card">
+<p><b>Thesis starters:</b></p>
+<ul>
+<li>"In <i>Queen Herod</i>, Duffy turns the Massacre of the Innocents into a monologue of complicit, class-privileged cruelty, exposing how absolute power performs atrocity as entertainment."</li>
+<li>"The poem's carol-like form and royal 'we' make the speaker's gleeful account of infanticide sound like a celebration she expects the reader to join."</li>
+</ul>
+<p><b>Pairing:</b> set against <i>Medusa</i> or <i>Mrs Midas</i> — all three give a famous story's silent woman a voice that is unsettling rather than sympathetic. Global issue: <i>"Power and privilege"</i>.</p>
+</div>
+
+<h3>7 · Examiner-Style Questions</h3>
+<div class="card">
+<ul>
+<li>Why does Duffy use a festive, carol-like form for an atrocity?</li>
+<li>What does the royal "we" reveal about the speaker's sense of power?</li>
+<li>Is the speaker monsters or merely privileged? Defend with one line.</li>
+</ul>
+</div>
+
+<h3>8 · Close Reading (add once text supplied)</h3>
+<p>When you paste the poem, I will add 8–12 quote-accurate key-passage notes and a vocab list, matching the Medusa entry.</p>`
+  },
+  /* ===================== 4 · Mrs Midas ===================== */
+  {
+    id:"mrs-midas",
+    title:"Mrs Midas",
+    author:"Carol Ann Duffy (b. 1955)",
+    context:"From <i>The World's Wife</i> (1999). The wife of King Midas — who wished that everything he touched turn to gold — tells her side of the myth: not the king's greed, but a marriage ruined by a fatal, literalising gift.",
+    text:"（正文待补全 · 请把《Mrs Midas》全诗粘贴给我）",
+    keyPassages:[],
+    vocab:[],
+    analysis:`<h3>1 · Context & Big Picture</h3>
+<p><b>Mrs Midas</b> is one of the collection's most anthologised poems. The myth: King Midas is granted the wish that whatever he touches becomes gold; he soon starves, unable to eat or embrace. Duffy gives the <i>wife</i> the voice, and what was a fable about greed becomes a poem about a marriage, desire, and the cost of a man's obsession.</p>
+<div class="card"><b>The single most important idea:</b> the golden touch is read not as wealth but as a husband's emotional uselessness — he becomes literally unable to touch, feed, or love. The poem is a quiet feminist fable about how male ambition destroys domestic life.</div>
+
+<h3>2 · Speaker, Voice & Tone</h3>
+<p>The speaker is wry, domesticated, faintly exasperated — a wife narrating a marriage gone wrong. <b>Tone:</b> comic → tender → resigned. The register is chatty and contemporary ("it was the whisky", "I made him"), which grounds the myth in a credible household.</p>
+
+<h3>3 · Key Themes</h3>
+<h4>① Marriage & intimacy destroyed</h4>
+<ul><li>The gift that should please instead separates: he cannot touch her, their child, or food.</li></ul>
+<h4>② Male desire / ambition as curse</h4>
+<ul><li>Midas's wish is his own; the poem quietly blames the husband's grasping nature for the ruin.</li></ul>
+<h4>③ The ordinary vs the mythic</h4>
+<ul><li>Duffy keeps the setting domestic (kitchen, garden, the child) so the fabulous curse lands as everyday loss.</li></ul>
+
+<h3>4 · Poetic Devices</h3>
+<ul>
+<li><b>Free verse + enjambment</b> — speech-paced lines pull the reader through the anecdote.</li>
+<li><b>Understatement / irony</b> — "It was the whisky" and small domestic details deflate the grand myth.</li>
+<li><b>Imagery of touch & appetite</b> — food, the child's skin, the "gilt" edge of things: the poem is obsessed with what is lost to the golden touch.</li>
+<li><b>Intertextuality</b> — Ovid's Midas, re-pointed from greed to marriage.</li>
+</ul>
+
+<h3>5 · Structure</h3>
+<p>A single sustained monologue in free verse, moving from the wish's comic onset to the separation ("I moved out"), ending with the wife living on, the curse contained but the marriage over. Circular: the garden golden, the husband alone.</p>
+
+<h3>6 · How to Use This for Your IB Essay</h3>
+<div class="card">
+<p><b>Thesis starters:</b></p>
+<ul>
+<li>"In <i>Mrs Midas</i>, Duffy rewrites the gold myth as a marriage poem: the fatal wish figures male self-absorption as a literal inability to touch, feed or love."</li>
+<li>"The poem's chatty, domestic register grounds a classical fable in a credible failed marriage, aligning the reader with the long-suffering wife rather than the mythic king."</li>
+</ul>
+<p><b>Pairing:</b> <i>Mrs Midas</i> + <i>Medusa</i> + <i>Mrs Lazarus</i> — three monologues where a woman outlives a man's catastrophe. Global issue: <i>"Power and privilege"</i> or <i>"Identity and belonging"</i>.</p>
+</div>
+
+<h3>7 · Examiner-Style Questions</h3>
+<div class="card">
+<ul>
+<li>How does Duffy make a myth feel like a marriage anecdote?</li>
+<li>What does the inability to eat or touch symbolise?</li>
+<li>Is the ending liberation or loss for the speaker? Hold both.</li>
+</ul>
+</div>
+
+<h3>8 · Close Reading (add once text supplied)</h3>
+<p>When you paste the poem, I will add quote-accurate key-passage notes and a vocab list.</p>`
+  },
+  /* ===================== 5 · From Mrs Tiresias ===================== */
+  {
+    id:"from-mrs-tiresias",
+    title:"From Mrs Tiresias",
+    author:"Carol Ann Duffy (b. 1955)",
+    context:"From <i>The World's Wife</i> (1999). Tiresias, in Greek myth, was a prophet who lived as both man and woman. Duffy's poem (titled 'From Mrs Tiresias') gives the wife's weary, funny account of a husband who keeps changing sex — a domestic comedy about gender and empathy.",
+    text:"（正文待补全 · 请把《From Mrs Tiresias》全诗粘贴给我）",
+    keyPassages:[],
+    vocab:[],
+    analysis:`<h3>1 · Context & Big Picture</h3>
+<p><b>From Mrs Tiresias</b> draws on the myth of Tiresias, blinded by Hera yet granted prophecy and the experience of both sexes. Duffy's speaker is his wife, exhausted by a husband who morphs between genders and expects her to adapt. The poem is a wry take on gender fluidity, empathy, and who does the emotional labour in a marriage.</p>
+<div class="card"><b>The single most important idea:</b> knowing "both sides" does not make the husband wise or kind — it makes him a burden. Duffy punctures the myth's profundity with domestic farce.</div>
+
+<h3>2 · Speaker, Voice & Tone</h3>
+<p>A long-suffering wife, flat, comic, affectionate-despite-everything. <b>Tone:</b> deadpan, exasperated, tender.</p>
+
+<h3>3 · Key Themes</h3>
+<h4>① Gender & perspective</h4>
+<ul><li>The poem plays with what it means to "have been both" — and whether that grants real understanding.</li></ul>
+<h4>② Marriage & compromise</h4>
+<ul><li>The wife absorbs the chaos; the humour sits on her tolerance.</li></ul>
+<h4>③ Myth deflated</h4>
+<ul><li>A prophetic, punished figure becomes a difficult husband who can't decide who he is.</li></ul>
+
+<h3>4 · Poetic Devices</h3>
+<ul>
+<li><b>Dramatic monologue</b> — the wife's steady voice contrasts the husband's transformations.</li>
+<li><b>Comic listing / anaphora</b> — the repeated changes catalogued wearily.</li>
+<li><b>Colloquial register</b> — contemporary slang keeps the myth earthly.</li>
+</ul>
+
+<h3>5 · Structure</h3>
+<p>Free verse, anecdote-driven, building a rhythm of "then he was a man / then a woman" until the wife's verdict lands.</p>
+
+<h3>6 · How to Use This for Your IB Essay</h3>
+<div class="card">
+<p><b>Thesis starter:</b> "Duffy domesticates the Tiresias myth to argue that lived experience of both genders need not produce wisdom — only a weary, tolerant wife."</p>
+<p><b>Pairing:</b> with <i>Mrs Midas</i> or <i>Mrs Faust</i> — wives coping with impossible husbands. Global issue: <i>"Identity and belonging"</i>.</p>
+</div>
+
+<h3>7 · Examiner-Style Questions</h3>
+<div class="card">
+<ul>
+<li>What is the poem's attitude to the husband's transformations?</li>
+<li>How does the comic form shape a serious point about gender?</li>
+</ul>
+</div>
+
+<h3>8 · Close Reading (add once text supplied)</h3>
+<p>When you paste the poem, I will add quote-accurate key-passage notes and a vocab list.</p>`
+  },
+  /* ===================== 6 · Pilate's Wife ===================== */
+  {
+    id:"pilates-wife",
+    title:"Pilate's Wife",
+    author:"Carol Ann Duffy (b. 1955)",
+    context:"From <i>The World's Wife</i> (1999). In the gospels, Pilate's wife warns her husband to have nothing to do with Jesus ('this righteous man'). Duffy gives her a sensual, conflicted monologue — a Roman woman drawn to the prisoner she cannot save.",
+    text:"（正文待补全 · 请把《Pilate's Wife》全诗粘贴给我）",
+    keyPassages:[],
+    vocab:[],
+    analysis:`<h3>1 · Context & Big Picture</h3>
+<p><b>Pilate's Wife</b> expands a single gospel footnote (Matthew 27:19) into a woman's voice. She dreams a warning about Jesus, but Duffy imagines more: desire, guilt, and powerlessness as her husband condemns him. The poem sits at the intersection of religion, empire, and female silence.</p>
+<div class="card"><b>The single most important idea:</b> the one woman who tries to intervene is powerless inside imperial machinery — her warning is a dream, not an act. Duffy asks what a wife's influence is worth against the state.</div>
+
+<h3>2 · Speaker, Voice & Tone</h3>
+<p>A Roman wife, sensual and reflective; <b>tone:</b> languid, regretful, charged.</p>
+
+<h3>3 · Key Themes</h3>
+<h4>① Powerlessness within power</h4>
+<ul><li>Married to the governor, yet unable to stop the execution.</li></ul>
+<h4>② Desire & the sacred</h4>
+<ul><li>The speaker is drawn to the prisoner; the erotic and the holy blur.</li></ul>
+<h4>③ Complicity & guilt</h4>
+<ul><li>Silence equals assent; the dream is her only protest.</li></ul>
+
+<h3>4 · Poetic Devices</h3>
+<ul>
+<li><b>Dramatic monologue</b> — intimate confession to an absent/condemned man.</li>
+<li><b>Religious intertext</b> — the gospel dream rewritten as longing.</li>
+<li><b>Sensory imagery</b> — touch, heat, the body, set against cold empire.</li>
+</ul>
+
+<h3>5 · Structure</h3>
+<p>Free verse, dream-like, moving from the night's warning to the aftermath she cannot undo.</p>
+
+<h3>6 · How to Use This for Your IB Essay</h3>
+<div class="card">
+<p><b>Thesis starter:</b> "Duffy gives Pilate's wife a voice that is at once desiring and warning — a rare female witness to empire who can only dream, never act."</p>
+<p><b>Pairing:</b> with <i>Queen Herod</i> (the other biblical queen) — one complicit, one helpless. Global issue: <i>"Power and privilege"</i>.</p>
+</div>
+
+<h3>7 · Examiner-Style Questions</h3>
+<div class="card">
+<ul>
+<li>Why frame the warning as a dream?</li>
+<li>How does Duffy blend erotic and sacred registers?</li>
+</ul>
+</div>
+
+<h3>8 · Close Reading (add once text supplied)</h3>
+<p>When you paste the poem, I will add quote-accurate key-passage notes and a vocab list.</p>`
+  },
+  /* ===================== 7 · Mrs Aesop ===================== */
+  {
+    id:"mrs-aesop",
+    title:"Mrs Aesop",
+    author:"Carol Ann Duffy (b. 1955)",
+    context:"From <i>The World's Wife</i> (1999). Aesop, the fabulist, told moral tales using animals. Duffy's Mrs Aesop is done with his endless fables and his didactic, joyless worldview — a comic marriage of instruction versus life.",
+    text:"（正文待补全 · 请把《Mrs Aesop》全诗粘贴给我）",
+    keyPassages:[],
+    vocab:[],
+    analysis:`<h3>1 · Context & Big Picture</h3>
+<p><b>Mrs Aesop</b> is a comic takedown of the moralising storyteller. Aesop reduces everything to a fable with a lesson; his wife wants to live. Duffy uses him as a stand-in for any man who explains life instead of living it.</p>
+<div class="card"><b>The single most important idea:</b> the fabulist's tidy morals are a cage; the wife's impatience is a claim to her own, un-allegorised life.</div>
+
+<h3>2 · Speaker, Voice & Tone</h3>
+<p>A witty, exasperated wife; <b>tone:</b> comic, sarcastic, liberating.</p>
+
+<h3>3 · Key Themes</h3>
+<h4>① Instruction vs experience</h4>
+<ul><li>Every event becomes a fable; she wants the event.</li></ul>
+<h4>② Male lecturing / condescension</h4>
+<ul><li>Aesop's parables read as quiet domination of the household's meaning.</li></ul>
+<h4>③ Liberation through refusal</h4>
+<ul><li>Her sarcasm is a kind of freedom.</li></ul>
+
+<h3>4 · Poetic Devices</h3>
+<ul>
+<li><b>Parody of fable</b> — the poem mimics Aesop's form to mock it.</li>
+<li><b>Anaphora / list</b> — a string of "he said" moralisms.</li>
+<li><b>Colloquial bite</b> — modern, slangy rebuttals.</li>
+</ul>
+
+<h3>5 · Structure</h3>
+<p>Free verse, built as a string of his lessons answered by her asides, ending in comic victory.</p>
+
+<h3>6 · How to Use This for Your IB Essay</h3>
+<div class="card">
+<p><b>Thesis starter:</b> "Duffy turns Aesop's fables against him: the poet-fabulist's need to moralise becomes, in his wife's voice, a comic failure to live."</p>
+<p><b>Pairing:</b> with <i>Mrs Midas</i> or <i>Mrs Faust</i> — wives vs impossible husbands. Global issue: <i>"Identity and belonging"</i>.</p>
+</div>
+
+<h3>7 · Examiner-Style Questions</h3>
+<div class="card">
+<ul>
+<li>How does the poem imitate and undermine fable form?</li>
+<li>What does the wife want that Aesop cannot give?</li>
+</ul>
+</div>
+
+<h3>8 · Close Reading (add once text supplied)</h3>
+<p>When you paste the poem, I will add quote-accurate key-passage notes and a vocab list.</p>`
+  },
+  /* ===================== 8 · Mrs Darwin ===================== */
+  {
+    id:"mrs-darwin",
+    title:"Mrs Darwin",
+    author:"Carol Ann Duffy (b. 1955)",
+    context:"From <i>The World's Wife</i> (1999). A two-line comic poem: Mrs Darwin, at the zoo, remarks that a chimpanzee reminds her of her husband — a punchline on evolution and marriage.",
+    text:"（正文待补全 · 请把《Mrs Darwin》全诗粘贴给我）",
+    keyPassages:[],
+    vocab:[],
+    analysis:`<h3>1 · Context & Big Picture</h3>
+<p><b>Mrs Darwin</b> is the collection's shortest poem — a two-line epistolary joke. Dated '7 April 1852', it has Mrs Darwin note that a chimpanzee 'reminds me of you'. The wit lands on Darwin's own theory: if humans descend from apes, the husband is the ape.</p>
+<div class="card"><b>The single most important idea:</b> a throwaway domestic line detonates a whole scientific revolution — Darwin's own wife casually confirms his heresy.</div>
+
+<h3>2 · Speaker, Voice & Tone</h3>
+<p>A wife writing a postcard; <b>tone:</b> deadpan, comic, devastating.</p>
+
+<h3>3 · Key Themes</h3>
+<h4>① Science & the domestic</h4>
+<ul><li>The grand theory is reduced to a marriage joke.</li></ul>
+<h4>② The wife's glance</h4>
+<ul><li>She sees the truth the world resists.</li></ul>
+
+<h3>4 · Poetic Devices</h3>
+<ul>
+<li><b>Epistolary form</b> — a dated diary/card entry.</li>
+<li><b>Irony / understatement</b> — the casual 'reminds me of you' carries the whole poem.</li>
+<li><b>Intertext</b> — Darwin's <i>Origin of Species</i> (1859) pre-echoed.</li>
+</ul>
+
+<h3>5 · Structure</h3>
+<p>Two lines, no padding. The brevity is the device.</p>
+
+<h3>6 · How to Use This for Your IB Essay</h3>
+<div class="card">
+<p><b>Thesis starter:</b> "In two lines, Duffy performs the collection's whole method: a famous man's story retold as his wife's throwaway, subversive remark."</p>
+<p><b>Pairing:</b> with <i>Mrs Icarus</i> — both tiny, comic, wife-voiced. Global issue: <i>"Power and privilege"</i>.</p>
+</div>
+
+<h3>7 · Examiner-Style Questions</h3>
+<div class="card">
+<ul>
+<li>Why is the date significant?</li>
+<li>How does brevity create the joke's power?</li>
+</ul>
+</div>
+
+<h3>8 · Close Reading (add once text supplied)</h3>
+<p>When you paste the poem, I will add quote-accurate key-passage notes and a vocab list.</p>`
+  },
+  /* ===================== 9 · Mrs Sisyphus ===================== */
+  {
+    id:"mrs-sisyphus",
+    title:"Mrs Sisyphus",
+    author:"Carol Ann Duffy (b. 1955)",
+    context:"From <i>The World's Wife</i> (1999). Sisyphus, condemned to roll a boulder uphill forever, is myth's emblem of futile labour. Duffy's wife watches him — and gets on with her own life, refusing to mythologise his struggle.",
+    text:"（正文待补全 · 请把《Mrs Sisyphus》全诗粘贴给我）",
+    keyPassages:[],
+    vocab:[],
+    analysis:`<h3>1 · Context & Big Picture</h3>
+<p><b>Mrs Sisyphus</b> quietly rewrites Camus's 'absurd hero'. While Sisyphus pushes his boulder, his wife refuses to make a tragedy of it — she has her own tasks. Duffy questions whether a man's grand futility should centre everyone else's life.</p>
+<div class="card"><b>The single most important idea:</b> the wife declines to worship the husband's labour; her neutrality is its own liberation.</div>
+
+<h3>2 · Speaker, Voice & Tone</h3>
+<p>Flat, unsentimental, a bit bored; <b>tone:</b> comic, dry.</p>
+
+<h3>3 · Key Themes</h3>
+<h4>① The absurd & the everyday</h4>
+<ul><li>His mythic curse; her practical day.</li></ul>
+<h4>② Refusing to centre the man</h4>
+<ul><li>She will not weep or wait.</li></ul>
+
+<h3>4 · Poetic Devices</h3>
+<ul>
+<li><b>Dramatic monologue</b> — her calm against his striving.</li>
+<li><b>Understatement</b> — the boulder is just 'a rock'.</li>
+</ul>
+
+<h3>5 · Structure</h3>
+<p>Free verse, a steady domestic report beside the famous toil.</p>
+
+<h3>6 · How to Use This for Your IB Essay</h3>
+<div class="card">
+<p><b>Thesis starter:</b> "Duffy deflates the Sisyphean myth: the wife's refusal to sanctify her husband's endless labour is a quiet claim to her own, un-mythologised life."</p>
+<p><b>Pairing:</b> with <i>Mrs Midas</i> — wives who outlive the husband's curse. Global issue: <i>"Identity and belonging"</i>.</p>
+</div>
+
+<h3>7 · Examiner-Style Questions</h3>
+<div class="card">
+<ul>
+<li>What does the wife's calm reveal about the myth?</li>
+<li>Is her indifference freedom or cruelty?</li>
+</ul>
+</div>
+
+<h3>8 · Close Reading (add once text supplied)</h3>
+<p>When you paste the poem, I will add quote-accurate key-passage notes and a vocab list.</p>`
+  },
+  /* ===================== 10 · Mrs Faust ===================== */
+  {
+    id:"mrs-faust",
+    title:"Mrs Faust",
+    author:"Carol Ann Duffy (b. 1955)",
+    context:"From <i>The World's Wife</i> (1999). Marlowe's Doctor Faustus sells his soul for power and knowledge. Duffy's Mrs Faust watches her husband chase modernity — credit cards, face-lifts, fame — and quietly files for divorce.",
+    text:"（正文待补全 · 请把《Mrs Faust》全诗粘贴给我）",
+    keyPassages:[],
+    vocab:[],
+    analysis:`<h3>1 · Context & Big Picture</h3>
+<p><b>Mrs Faust</b> updates Marlowe's Renaissance bargain for the consumer age. Faust's demonic pact becomes credit, cosmetic surgery, celebrity — and his wife's response is pragmatically modern: she leaves him. Duffy reads the Faust myth as mid-life male crisis.</p>
+<div class="card"><b>The single most important idea:</b> the soul sold is to shallow modern appetites; the wife's exit is the real judgement.</div>
+
+<h3>2 · Speaker, Voice & Tone</h3>
+<p>A wry, modern wife; <b>tone:</b> comic, worldly, done.</p>
+
+<h3>3 · Key Themes</h3>
+<h4>① Modernity & desire</h4>
+<ul><li>Face-lifts, loyalty cards, fame — the new hells.</li></ul>
+<h4>② The wife's autonomy</h4>
+<ul><li>She divorces the myth; the story ends with her, not him.</li></ul>
+
+<h3>4 · Poetic Devices</h3>
+<ul>
+<li><b>Anachronism</b> — Renaissance pact meets 1990s consumerism.</li>
+<li><b>List / anaphora</b> — the accumulating absurd purchases.</li>
+<li><b>Dramatic monologue</b> — her cool inventory of his ruin.</li>
+</ul>
+
+<h3>5 · Structure</h3>
+<p>Free verse, a comic ledger of his bargains closing on her departure.</p>
+
+<h3>6 · How to Use This for Your IB Essay</h3>
+<div class="card">
+<p><b>Thesis starter:</b> "Duffy translates Faust's demonic pact into consumer modernity; the wife's divorce is the poem's true moral verdict on a man who sells everything for nothing."</p>
+<p><b>Pairing:</b> with <i>Mrs Midas</i> — husbands whose wishes wreck the marriage. Global issue: <i>"Power and privilege"</i>.</p>
+</div>
+
+<h3>7 · Examiner-Style Questions</h3>
+<div class="card">
+<ul>
+<li>How do modern purchases stand in for the demonic pact?</li>
+<li>Why does the poem end with the wife leaving?</li>
+</ul>
+</div>
+
+<h3>8 · Close Reading (add once text supplied)</h3>
+<p>When you paste the poem, I will add quote-accurate key-passage notes and a vocab list.</p>`
+  },
+  /* ===================== 11 · Delilah ===================== */
+  {
+    id:"delilah",
+    title:"Delilah",
+    author:"Carol Ann Duffy (b. 1955)",
+    context:"From <i>The World's Wife</i> (1999). In Judges, Delilah betrays Samson, cutting his hair to rob his strength. Duffy's Delilah speaks — and the betrayal reads as a woman tired of being the excuse for a man's fall.",
+    text:"（正文待补全 · 请把《Delilah》全诗粘贴给我）",
+    keyPassages:[],
+    vocab:[],
+    analysis:`<h3>1 · Context & Big Picture</h3>
+<p><b>Delilah</b> reclaims the biblical temptress. The poem lets her answer the legend that paints her as mere traitor: here she is sharp, sexual, and done being blamed for Samson's choices.</p>
+<div class="card"><b>The single most important idea:</b> Delilah reframes the betrayal as a man's weakness projected onto a woman — she names the hair, the strength, and her own agency.</div>
+
+<h3>2 · Speaker, Voice & Tone</h3>
+<p>Confident, sensual, defiant; <b>tone:</b> provocative, witty.</p>
+
+<h3>3 · Key Themes</h3>
+<h4>① Blame & the scapegoat woman</h4>
+<ul><li>She refuses the role of sole traitor.</li></ul>
+<h4>② Sex & power</h4>
+<ul><li>The hair as fetish and weapon.</li></ul>
+
+<h3>4 · Poetic Devices</h3>
+<ul>
+<li><b>Dramatic monologue</b> — her version against scripture.</li>
+<li><b>Intertext</b> — Judges 16 rewritten.</li>
+<li><b>Sexual / comic register</b> — undercuts the pious tale.</li>
+</ul>
+
+<h3>5 · Structure</h3>
+<p>Free verse, building from flirtation to a cold final cut.</p>
+
+<h3>6 · How to Use This for Your IB Essay</h3>
+<div class="card">
+<p><b>Thesis starter:</b> "Duffy's Delilah seizes the biblical narrative to show the 'traitor' as a woman forced to carry a man's downfall — the haircut is his weakness, not her crime."</p>
+<p><b>Pairing:</b> with <i>Salome</i> — two biblical women who kill/unknow men and are vilified for it. Global issue: <i>"Power and privilege"</i>.</p>
+</div>
+
+<h3>7 · Examiner-Style Questions</h3>
+<div class="card">
+<ul>
+<li>How does Duffy reshape Delilah's guilt?</li>
+<li>What does the hair symbolise here?</li>
+</ul>
+</div>
+
+<h3>8 · Close Reading (add once text supplied)</h3>
+<p>When you paste the poem, I will add quote-accurate key-passage notes and a vocab list.</p>`
+  },
+  /* ===================== 12 · Anne Hathaway ===================== */
+  {
+    id:"anne-hathaway",
+    title:"Anne Hathaway",
+    author:"Carol Ann Duffy (b. 1955)",
+    context:"From <i>The World's Wife</i> (1999). Shakespeare's wife, Anne Hathaway, speaks of their marriage bed as the real stage of his genius — a love poem that makes the wife, not the plays, the source.",
+    text:"（正文待补全 · 请把《Anne Hathaway》全诗粘贴给我）",
+    keyPassages:[],
+    vocab:[],
+    analysis:`<h3>1 · Context & Big Picture</h3>
+<p><b>Anne Hathaway</b> is among the collection's most beloved poems. Shakespeare's widow addresses the second-best bed left to her in his will — and turns it into a rapturous love poem. Duffy makes the marriage bed the true theatre of his imagination.</p>
+<div class="card"><b>The single most important idea:</b> the 'second best bed' is the first, best place — their love, not the Globe, is where Shakespeare's language was born.</div>
+
+<h3>2 · Speaker, Voice & Tone</h3>
+<p>A loving, sensual widow; <b>tone:</b> tender, celebratory, intimate.</p>
+
+<h3>3 · Key Themes</h3>
+<h4>① Love as source of art</h4>
+<ul><li>His poems are echoes of their bed.</li></ul>
+<h4>② The wife made central</h4>
+<ul><li>She, not the plays, is the muse and the meaning.</li></ul>
+
+<h3>4 · Poetic Devices</h3>
+<ul>
+<li><b>Metaphor / conceit</b> — the bed as stage, book, world.</li>
+<li><b>Intertext</b> — Shakespeare's sonnets and will woven in.</li>
+<li><b>Sensuous imagery</b> — touch, scent, light.</li>
+<li><b>Free verse</b> with a song-like pulse.</li>
+</ul>
+
+<h3>5 · Structure</h3>
+<p>Free verse, a single sustained address to the dead husband and the bed that outlasts the plays.</p>
+
+<h3>6 · How to Use This for Your IB Essay</h3>
+<div class="card">
+<p><b>Thesis starter:</b> "In <i>Anne Hathaway</i>, Duffy installs the wife at the origin of Shakespeare's art: the 'second best bed' becomes the truest stage, a love that authored the plays."</p>
+<p><b>Pairing:</b> with <i>Little Red-Cap</i> — both celebrate literature as born from desire. Global issue: <i>"Identity and belonging"</i>.</p>
+</div>
+
+<h3>7 · Examiner-Style Questions</h3>
+<div class="card">
+<ul>
+<li>Why is the 'second best bed' the poem's centre?</li>
+<li>How does Duffy use Shakespeare against himself?</li>
+</ul>
+</div>
+
+<h3>8 · Close Reading (add once text supplied)</h3>
+<p>When you paste the poem, I will add quote-accurate key-passage notes and a vocab list.</p>`
+  },
+  /* ===================== 13 · Queen Kong ===================== */
+  {
+    id:"queen-kong",
+    title:"Queen Kong",
+    author:"Carol Ann Duffy (b. 1955)",
+    context:"From <i>The World's Wife</i> (1999). A gender-flipped King Kong: the giant ape is a woman, and the captured 'beauty' is a man. Duffy reverses the gaze and the captivity narrative.",
+    text:"（正文待补全 · 请把《Queen Kong》全诗粘贴给我）",
+    keyPassages:[],
+    vocab:[],
+    analysis:`<h3>1 · Context & Big Picture</h3>
+<p><b>Queen Kong</b> flips the 1933 film: the towering monster is female, the blonde captive is male, and the camera's gaze is turned around. Duffy uses pastiche to ask who gets to be the monster, and who the prize.</p>
+<div class="card"><b>The single most important idea:</b> reversing the genders exposes the original's voyeurism — the 'beauty' was always a possession on display.</div>
+
+<h3>2 · Speaker, Voice & Tone</h3>
+<p>Camp, cinematic, ironic; <b>tone:</b> playful, satirical.</p>
+
+<h3>3 · Key Themes</h3>
+<h4>① The male gaze reversed</h4>
+<ul><li>Now the man is the spectacle.</li></ul>
+<h4>② Monster as woman</h4>
+<ul><li>Female size/strength recoded as threat.</li></ul>
+
+<h3>4 · Poetic Devices</h3>
+<ul>
+<li><b>Pastiche</b> — film language (skyscraper, scream, plane).</li>
+<li><b>Intertext</b> — King Kong (1933) and its remakes.</li>
+<li><b>Comic rhyme / metre</b> — a mock-romantic pulse.</li>
+</ul>
+
+<h3>5 · Structure</h3>
+<p>Free verse with a cinematic sweep, from capture to the famous height.</p>
+
+<h3>6 · How to Use This for Your IB Essay</h3>
+<div class="card">
+<p><b>Thesis starter:</b> "Duffy's gender-swap of King Kong turns the captivity myth inside out: the male 'beauty' becomes the watched object, exposing the original's gendered gaze."</p>
+<p><b>Pairing:</b> with <i>Queen Herod</i> — camp, mythic, gender-aware. Global issue: <i>"Power and privilege"</i>.</p>
+</div>
+
+<h3>7 · Examiner-Style Questions</h3>
+<div class="card">
+<ul>
+<li>What does swapping the genders expose in the original?</li>
+<li>How does film pastiche shape the poem's meaning?</li>
+</ul>
+</div>
+
+<h3>8 · Close Reading (add once text supplied)</h3>
+<p>When you paste the poem, I will add quote-accurate key-passage notes and a vocab list.</p>`
+  },
+  /* ===================== 14 · Mrs Quasimodo ===================== */
+  {
+    id:"mrs-quasimodo",
+    title:"Mrs Quasimodo",
+    author:"Carol Ann Duffy (b. 1955)",
+    context:"From <i>The World's Wife</i> (1999). Hugo's Quasimodo, the hunchback of Notre-Dame, is given a wife — a woman whose own deformity (or difference) meets his, a quiet fable about being seen.",
+    text:"（正文待补全 · 请把《Mrs Quasimodo》全诗粘贴给我）",
+    keyPassages:[],
+    vocab:[],
+    analysis:`<h3>1 · Context & Big Picture</h3>
+<p><b>Mrs Quasimodo</b> invents a partner for Hugo's bell-ringer. Where he is outwardly deformed, she carries her own hidden difference; together they are simply two people who see each other. Duffy's smallest gestures often carry the largest empathy.</p>
+<div class="card"><b>The single most important idea:</b> deformity is reframed as shared humanness; the 'monster' finds a mate who is not afraid.</div>
+
+<h3>2 · Speaker, Voice & Tone</h3>
+<p>Tender, plain; <b>tone:</b> gentle, pity-free.</p>
+
+<h3>3 · Key Themes</h3>
+<h4>① Seeing & being seen</h4>
+<ul><li>Love as recognition beyond the surface.</li></ul>
+<h4>② Outsiders together</h4>
+<ul><li>Two 'monsters' make a home.</li></ul>
+
+<h3>4 · Poetic Devices</h3>
+<ul>
+<li><b>Intertext</b> — Hugo's <i>Notre-Dame de Paris</i>.</li>
+<li><b>Plain imagery</b> — the body described without horror.</li>
+<li><b>Free verse</b>, quiet.</li>
+</ul>
+
+<h3>5 · Structure</h3>
+<p>Short free verse, a domestic miniature.</p>
+
+<h3>6 · How to Use This for Your IB Essay</h3>
+<div class="card">
+<p><b>Thesis starter:</b> "Duffy gives Quasimodo a wife to argue that monstrosity is a story told by the seeing; between two outsiders, the gaze that damns is replaced by one that loves."</p>
+<p><b>Pairing:</b> with <i>Medusa</i> — monsters given a human, loving voice. Global issue: <i>"Identity and belonging"</i>.</p>
+</div>
+
+<h3>7 · Examiner-Style Questions</h3>
+<div class="card">
+<ul>
+<li>What kind of 'deformity' does the wife have?</li>
+<li>How does the poem refuse pity?</li>
+</ul>
+</div>
+
+<h3>8 · Close Reading (add once text supplied)</h3>
+<p>When you paste the poem, I will add quote-accurate key-passage notes and a vocab list.</p>`
+  },
+  /* ===================== 16 · The Devil's Wife ===================== */
+  {
+    id:"the-devils-wife",
+    title:"The Devil's Wife",
+    author:"Carol Ann Duffy (b. 1955)",
+    context:"From <i>The World's Wife</i> (1999). A long, tense monologue spoken by Myra Hindley (the Moors murderer) to Ian Brady — Duffy ventriloquises the most reviled female figure in modern British crime to ask how evil is gendered and shared.",
+    text:"（正文待补全 · 请把《The Devil's Wife》全诗粘贴给我）",
+    keyPassages:[],
+    vocab:[],
+    analysis:`<h3>1 · Context & Big Picture</h3>
+<p><b>The Devil's Wife</b> is the collection's most disturbing poem. Duffy speaks in the voice of Myra Hindley addressing Ian Brady, her co-murderer. The poem does not excuse; it inhabits a psyche to show how ordinary seduction becomes atrocity, and how a woman is written as the devil's wife rather than his equal.</p>
+<div class="card"><b>The single most important idea:</b> the poem probes complicity — how a 'wife' is drawn into, and named by, a man's evil, and what that says about how we gender monstrosity.</div>
+
+<h3>2 · Speaker, Voice & Tone</h3>
+<p>Cold, intimate, theatrical; <b>tone:</b> seductive then stark.</p>
+
+<h3>3 · Key Themes</h3>
+<h4>① Complicity & seduction</h4>
+<ul><li>How ordinary desire slides into crime.</li></ul>
+<h4>② Gendering evil</h4>
+<ul><li>Why is she 'the devil's wife', not the devil?</li></ul>
+<h4>③ Performance of self</h4>
+<ul><li>The persona as mask.</li></ul>
+
+<h3>4 · Poetic Devices</h3>
+<ul>
+<li><b>Dramatic monologue</b> — unbearable intimacy with a real killer.</li>
+<li><b>Direct address</b> — to Brady, implicating the reader.</li>
+<li><b>Flat, modern diction</b> — the banality of evil.</li>
+</ul>
+
+<h3>5 · Structure</h3>
+<p>Long free verse in sections, a confessed, circling account.</p>
+
+<h3>6 · How to Use This for Your IB Essay</h3>
+<div class="card">
+<p><b>Thesis starter:</b> "In <i>The Devil's Wife</i>, Duffy ventriloquises Myra Hindley to expose how a woman is conscripted into, and renamed by, a man's evil — complicity as a gendered script."</p>
+<p><b>Pairing:</b> with <i>Queen Herod</i> — female voices for female evil. Global issue: <i>"Power and privilege"</i>.</p>
+</div>
+
+<h3>7 · Examiner-Style Questions</h3>
+<div class="card">
+<ul>
+<li>Why give Hindley a voice at all?</li>
+<li>How does the poem handle the reader's discomfort?</li>
+</ul>
+</div>
+
+<h3>8 · Close Reading (add once text supplied)</h3>
+<p>When you paste the poem, I will add quote-accurate key-passage notes and a vocab list.</p>`
+  },
+  /* ===================== 17 · Circe ===================== */
+  {
+    id:"circe",
+    title:"Circe",
+    author:"Carol Ann Duffy (b. 1955)",
+    context:"From <i>The World's Wife</i> (1999). In the Odyssey, the witch Circe turns men into pigs. Duffy's Circe is tired, funny, and done with Odysseus's men — a solitary woman who prefers her animals to heroes.",
+    text:"（正文待补全 · 请把《Circe》全诗粘贴给我）",
+    keyPassages:[],
+    vocab:[],
+    analysis:`<h3>1 · Context & Big Picture</h3>
+<p><b>Circe</b> revisits the <i>Odyssey</i>'s enchantress. Homer's Circe drugs and transforms Odysseus's crew; Duffy's is world-weary, keeping her pigs as company and mocking the hero who thinks he can command her. The poem is a witty take on male entitlement and female solitude.</p>
+<div class="card"><b>The single most important idea:</b> the men become pigs because they already are; Circe's magic only reveals them, and she prefers the honest company of animals.</div>
+
+<h3>2 · Speaker, Voice & Tone</h3>
+<p>Cool, amused, solitary; <b>tone:</b> comic, disdainful.</p>
+
+<h3>3 · Key Themes</h3>
+<h4>① Male entitlement</h4>
+<ul><li>Odysseus expects to be served; she declines.</li></ul>
+<h4>② Solitude & preference</h4>
+<ul><li>Her island is chosen, not punishment.</li></ul>
+
+<h3>4 · Poetic Devices</h3>
+<ul>
+<li><b>Intertext</b> — Homer's <i>Odyssey</i> Book 10.</li>
+<li><b>Metamorphosis as reveal</b> — the pig is the man.</li>
+<li><b>Dramatic monologue</b> — her verdict on heroes.</li>
+</ul>
+
+<h3>5 · Structure</h3>
+<p>Free verse, a wry inventory of visitors turned to swine.</p>
+
+<h3>6 · How to Use This for Your IB Essay</h3>
+<div class="card">
+<p><b>Thesis starter:</b> "Duffy's Circe turns metamorphosis into judgement: the men are pigs before the spell, and her solitude is a refusal of heroic entitlement."</p>
+<p><b>Pairing:</b> with <i>Medusa</i> — classical monsters given witty, human voices. Global issue: <i>"Power and privilege"</i>.</p>
+</div>
+
+<h3>7 · Examiner-Style Questions</h3>
+<div class="card">
+<ul>
+<li>Why does Circe prefer the pigs?</li>
+<li>How does the poem recast Odysseus?</li>
+</ul>
+</div>
+
+<h3>8 · Close Reading (add once text supplied)</h3>
+<p>When you paste the poem, I will add quote-accurate key-passage notes and a vocab list.</p>`
+  },
+  /* ===================== 18 · Mrs Lazarus ===================== */
+  {
+    id:"mrs-lazarus",
+    title:"Mrs Lazarus",
+    author:"Carol Ann Duffy (b. 1955)",
+    context:"From <i>The World's Wife</i> (1999). In John 11, Jesus raises Lazarus from the dead. Duffy gives the voice to Lazarus's wife — who, having grieved and moved on, is horrified when her husband returns.",
+    text:"（正文待补全 · 请把《Mrs Lazarus》全诗粘贴给我）",
+    keyPassages:[],
+    vocab:[],
+    analysis:`<h3>1 · Context & Big Picture</h3>
+<p><b>Mrs Lazarus</b> is one of the collection's most affecting poems. The gospel miracle is retold from the wife who buried her husband and began to live again — only for him to be resurrected, undoing her hard-won freedom. Duffy reads resurrection as violation.</p>
+<div class="card"><b>The single most important idea:</b> grief completed is a kind of marriage to the dead; the husband's return shatters the life she rebuilt — Duffy makes the miracle the tragedy.</div>
+
+<h3>2 · Speaker, Voice & Tone</h3>
+<p>Raw, grieving-then-furious; <b>tone:</b> elegiac then savage.</p>
+
+<h3>3 · Key Themes</h3>
+<h4>① Grief & survival</h4>
+<ul><li>She mourns, then rebuilds; the resurrection undoes both.</li></ul>
+<h4>② Female autonomy vs the returned man</h4>
+<ul><li>His life overrides her hard-won freedom.</li></ul>
+
+<h3>4 · Poetic Devices</h3>
+<ul>
+<li><b>Intertext</b> — John 11, the raising of Lazarus.</li>
+<li><b>Enjambment / visceral imagery</b> — the body, the grave, the bed.</li>
+<li><b>Dramatic monologue</b> — her rage at being unmade.</li>
+</ul>
+
+<h3>5 · Structure</h3>
+<p>Free verse in three movements: death, grieving/remarriage to life, the horrifying return.</p>
+
+<h3>6 · How to Use This for Your IB Essay</h3>
+<div class="card">
+<p><b>Thesis starter:</b> "In <i>Mrs Lazarus</i>, Duffy turns the gospel miracle inside out: the husband's resurrection is the wife's violation, undoing the autonomy she won through grief."</p>
+<p><b>Pairing:</b> with <i>Mrs Midas</i> — a woman undone by a man's return/curse. Global issue: <i>"Identity and belonging"</i>.</p>
+</div>
+
+<h3>7 · Examiner-Style Questions</h3>
+<div class="card">
+<ul>
+<li>Why is the resurrection the tragedy here?</li>
+<li>How does Duffy render grief as a form of love?</li>
+</ul>
+</div>
+
+<h3>8 · Close Reading (add once text supplied)</h3>
+<p>When you paste the poem, I will add quote-accurate key-passage notes and a vocab list.</p>`
+  },
+  /* ===================== 19 · Pygmalion's Bride ===================== */
+  {
+    id:"pygmalions-bride",
+    title:"Pygmalion's Bride",
+    author:"Carol Ann Duffy (b. 1955)",
+    context:"From <i>The World's Wife</i> (1999). Ovid's sculptor Pygmalion falls for his own ivory statue and prays her to life. Duffy's 'bride' speaks from inside the marble — a chilling poem about being invented, possessed, and brought to life as a man's idea.",
+    text:"（正文待补全 · 请把《Pygmalion's Bride》全诗粘贴给我）",
+    keyPassages:[],
+    vocab:[],
+    analysis:`<h3>1 · Context & Big Picture</h3>
+<p><b>Pygmalion's Bride</b> is one of Duffy's darkest. The statue who is brought to life narrates from the marble: she did not ask to be made, and the lover who sculpted her owns her. The poem is about male creation of the female as possession.</p>
+<div class="card"><b>The single most important idea:</b> to be 'created' by a man is to be owned by him; the bride's animation is a captivity, not a gift.</div>
+
+<h3>2 · Speaker, Voice & Tone</h3>
+<p>Cold, from within stone; <b>tone:</b> uncanny, accusatory.</p>
+
+<h3>3 · Key Themes</h3>
+<h4>① The made woman</h4>
+<ul><li>Female identity authored by male desire.</li></ul>
+<h4>② Possession & the gaze</h4>
+<ul><li>She is carved to be looked at and owned.</li></ul>
+
+<h3>4 · Poetic Devices</h3>
+<ul>
+<li><b>Intertext</b> — Ovid's <i>Metamorphoses</i> X.</li>
+<li><b>Stone / marble imagery</b> — the body as sculpted object.</li>
+<li><b>Dramatic monologue</b> — the silenced object speaks.</li>
+</ul>
+
+<h3>5 · Structure</h3>
+<p>Free verse, from the stillness of marble to the forced 'life' and its refusal.</p>
+
+<h3>6 · How to Use This for Your IB Essay</h3>
+<div class="card">
+<p><b>Thesis starter:</b> "Duffy's statue-bride exposes Pygmalion's love as manufacture: to be dreamed and carved by a man is to be possessed, so her 'life' is the poem's real horror."</p>
+<p><b>Pairing:</b> with <i>Pygmalion's Bride</i> / <i>Mrs Quasimodo</i> — women as made objects. Global issue: <i>"Power and privilege"</i>.</p>
+</div>
+
+<h3>7 · Examiner-Style Questions</h3>
+<div class="card">
+<ul>
+<li>Why speak from inside the marble?</li>
+<li>What does 'coming to life' cost the bride?</li>
+</ul>
+</div>
+
+<h3>8 · Close Reading (add once text supplied)</h3>
+<p>When you paste the poem, I will add quote-accurate key-passage notes and a vocab list.</p>`
+  },
+  /* ===================== 20 · Mrs Rip Van Winkle ===================== */
+  {
+    id:"mrs-rip-van-winkle",
+    title:"Mrs Rip Van Winkle",
+    author:"Carol Ann Duffy (b. 1955)",
+    context:"From <i>The World's Wife</i> (1999). Irving's Rip sleeps for twenty years and wakes to a changed world. Duffy gives his wife the voice — the woman who ran the household he abandoned, and who is glad to be rid of him.",
+    text:"（正文待补全 · 请把《Mrs Rip Van Winkle》全诗粘贴给我）",
+    keyPassages:[],
+    vocab:[],
+    analysis:`<h3>1 · Context & Big Picture</h3>
+<p><b>Mrs Rip Van Winkle</b> rewrites Irving's tale from the wife's side. While Rip naps through two decades, she holds the family together; his long sleep is her long labour, and his return is no rescue. Duffy turns a cosy American myth into a working wife's quiet triumph.</p>
+<div class="card"><b>The single most important idea:</b> the husband's famous rest is the wife's unpaid work; when he wakes, she has already lived the life he missed.</div>
+
+<h3>2 · Speaker, Voice & Tone</h3>
+<p>Practical, dry, unimpressed; <b>tone:</b> comic, relieved.</p>
+
+<h3>3 · Key Themes</h3>
+<h4>① Invisible female labour</h4>
+<ul><li>She keeps the home he abandons.</li></ul>
+<h4>② Freedom in his absence</h4>
+<ul><li>His sleep is her liberty.</li></ul>
+
+<h3>4 · Poetic Devices</h3>
+<ul>
+<li><b>Intertext</b> — Irving's 'Rip Van Winkle' (1819).</li>
+<li><b>Understatement</b> — the decades as a shrug.</li>
+<li><b>Dramatic monologue</b> — her calm verdict.</li>
+</ul>
+
+<h3>5 · Structure</h3>
+<p>Free verse, a wry before/after of his nap and her life.</p>
+
+<h3>6 · How to Use This for Your IB Essay</h3>
+<div class="card">
+<p><b>Thesis starter:</b> "Duffy's Mrs Rip reframes the tale's magic sleep as the wife's decades of labour — the husband's absence is the condition of her competence."</p>
+<p><b>Pairing:</b> with <i>Mrs Sisyphus</i> — wives who function while husbands are stuck. Global issue: <i>"Power and privilege"</i>.</p>
+</div>
+
+<h3>7 · Examiner-Style Questions</h3>
+<div class="card">
+<ul>
+<li>What does the sleep symbolise for her?</li>
+<li>How does the comic form carry a serious point?</li>
+</ul>
+</div>
+
+<h3>8 · Close Reading (add once text supplied)</h3>
+<p>When you paste the poem, I will add quote-accurate key-passage notes and a vocab list.</p>`
+  },
+  /* ===================== 21 · Mrs Icarus ===================== */
+  {
+    id:"mrs-icarus",
+    title:"Mrs Icarus",
+    author:"Carol Ann Duffy (b. 1955)",
+    context:"From <i>The World's Wife</i> (1999). A tiny comic poem: Icarus's wife reacts to his famous fall — 'the workplace/ is where he fell from' — a deadpan domestic gloss on mythic hubris.",
+    text:"（正文待补全 · 请把《Mrs Icarus》全诗粘贴给我）",
+    keyPassages:[],
+    vocab:[],
+    analysis:`<h3>1 · Context & Big Picture</h3>
+<p><b>Mrs Icarus</b> is, like <i>Mrs Darwin</i>, a miniature. Where the myth mourns the boy who flew too near the sun, the wife notes, flatly, where he fell — and gets on with the ironing. Duffy shrinks epic tragedy to household fact.</p>
+<div class="card"><b>The single most important idea:</b> the wife's indifference is the poem — male hubris meets female routine, and routine wins.</div>
+
+<h3>2 · Speaker, Voice & Tone</h3>
+<p>Flat, domestic; <b>tone:</b> comic, unbothered.</p>
+
+<h3>3 · Key Themes</h3>
+<h4>① Myth vs the everyday</h4>
+<ul><li>The fall is just a mess to clear up.</li></ul>
+<h4>② Female endurance</h4>
+<ul><li>She outlasts the drama.</li></ul>
+
+<h3>4 · Poetic Devices</h3>
+<ul>
+<li><b>Epistolary / note form</b> — a brief report.</li>
+<li><b>Anti-climax</b> — the grand death as errand.</li>
+<li><b>Intertext</b> — Ovid's Icarus.</li>
+</ul>
+
+<h3>5 · Structure</h3>
+<p>A few lines; the brevity is the joke.</p>
+
+<h3>6 · How to Use This for Your IB Essay</h3>
+<div class="card">
+<p><b>Thesis starter:</b> "In <i>Mrs Icarus</i>, Duffy collapses mythic tragedy into domestic reportage — the wife's flat tone is the collection's recurring answer to male grandeur."</p>
+<p><b>Pairing:</b> with <i>Mrs Darwin</i> — tiny, comic, wife-voiced. Global issue: <i>"Power and privilege"</i>.</p>
+</div>
+
+<h3>7 · Examiner-Style Questions</h3>
+<div class="card">
+<ul>
+<li>Why is the domestic tone funny here?</li>
+<li>What does 'the workplace' imply?</li>
+</ul>
+</div>
+
+<h3>8 · Close Reading (add once text supplied)</h3>
+<p>When you paste the poem, I will add quote-accurate key-passage notes and a vocab list.</p>`
+  },
+  /* ===================== 22 · Frau Freud ===================== */
+  {
+    id:"frau-freud",
+    title:"Frau Freud",
+    author:"Carol Ann Duffy (b. 1955)",
+    context:"From <i>The World's Wife</i> (1999). The wife of Sigmund Freud delivers a comic, R-rated monologue about her husband's obsession with sex and his own importance — a bawdy takedown of the father of psychoanalysis.",
+    text:"（正文待补全 · 请把《Frau Freud》全诗粘贴给我）",
+    keyPassages:[],
+    vocab:[],
+    analysis:`<h3>1 · Context & Big Picture</h3>
+<p><b>Frau Freud</b> is the collection's bawdiest poem. Freud's wife mocks his fixation on sex and his grand theory, reducing psychoanalysis to a husband's self-importance. Duffy uses comedy to deflate a man who explained everything — especially women.</p>
+<div class="card"><b>The single most important idea:</b> the theorist of desire is, to his wife, just a man with one subject and a high opinion of himself.</div>
+
+<h3>2 · Speaker, Voice & Tone</h3>
+<p>Bawdy, witty, exasperated; <b>tone:</b> comic, R-rated.</p>
+
+<h3>3 · Key Themes</h3>
+<h4>① Theorist vs wife</h4>
+<ul><li>His system; her eye-roll.</li></ul>
+<h4>② Sex as all-explanation</h4>
+<ul><li>She lampoons the single-key theory.</li></ul>
+
+<h3>4 · Poetic Devices</h3>
+<ul>
+<li><b>Dramatic monologue</b> — the wife's comic verdict.</li>
+<li><b>Bawdy pun / rhyme</b> — the poem is built on them.</li>
+<li><b>Intertext</b> — Freudian psychoanalysis.</li>
+</ul>
+
+<h3>5 · Structure</h3>
+<p>Free verse with a comic, rising ribaldry to a punchline.</p>
+
+<h3>6 · How to Use This for Your IB Essay</h3>
+<div class="card">
+<p><b>Thesis starter:</b> "Duffy's Frau Freud turns psychoanalysis into bedroom comedy: the father of the talking cure is, to his wife, a man who mistook his own preoccupation for universal truth."</p>
+<p><b>Pairing:</b> with <i>Mrs Aesop</i> — wives debunking famous husbands. Global issue: <i>"Power and privilege"</i>.</p>
+</div>
+
+<h3>7 · Examiner-Style Questions</h3>
+<div class="card">
+<ul>
+<li>How does comedy undercut Freud's authority?</li>
+<li>Why is the poem so bodily?</li>
+</ul>
+</div>
+
+<h3>8 · Close Reading (add once text supplied)</h3>
+<p>When you paste the poem, I will add quote-accurate key-passage notes and a vocab list.</p>`
+  },
+  /* ===================== 23 · Salome ===================== */
+  {
+    id:"salome",
+    title:"Salome",
+    author:"Carol Ann Duffy (b. 1955)",
+    context:"From <i>The World's Wife</i> (1999). The biblical Salome, who demanded John the Baptist's head, speaks as a jaded party girl with a hangover — Duffy turns the temptress into a bored modern woman who can't even remember which man she killed.",
+    text:"（正文待补全 · 请把《Salome》全诗粘贴给我）",
+    keyPassages:[],
+    vocab:[],
+    analysis:`<h3>1 · Context & Big Picture</h3>
+<p><b>Salome</b> is one of the collection's most quoted poems. The girl who danced for a head becomes a casual, post-party narrator ('I'd done it before, and doubtless I'll do it again') — killing men as a habit, not a plot. Duffy recodes monstrous female sexuality as ennui.</p>
+<div class="card"><b>The single most important idea:</b> Salome's violence is routine, not seductive; the poem strips the biblical temptress of mystery and gives her a hangover and a shrug.</div>
+
+<h3>2 · Speaker, Voice & Tone</h3>
+<p>Cool, bored, blackly funny; <b>tone:</b> comic, detached.</p>
+
+<h3>3 · Key Themes</h3>
+<h4>① Female violence as habit</h4>
+<ul><li>The kill is a one-night stand's aftermath.</li></ul>
+<h4>② Myth stripped of glory</h4>
+<ul><li>No dance, no Herod — just a headache and a head.</li></ul>
+
+<h3>4 · Poetic Devices</h3>
+<ul>
+<li><b>Intertext</b> — Matthew 14 / Wilde's <i>Salomé</i>.</li>
+<li><b>Colloquial register</b> — hangovers, fags, blur.</li>
+<li><b>Anaphora / refrain</b> — 'I'd done it before…'</li>
+<li><b>Dramatic monologue</b> — her flat confession.</li>
+</ul>
+
+<h3>5 · Structure</h3>
+<p>Free verse, a morning-after inventory building to the casual refrain.</p>
+
+<h3>6 · How to Use This for Your IB Essay</h3>
+<div class="card">
+<p><b>Thesis starter:</b> "In <i>Salome</i>, Duffy empties the biblical temptress of all allure: the beheading is a comedown, not a climax, and the speaker's boredom is the real defiance."</p>
+<p><b>Pairing:</b> with <i>Delilah</i> — biblical women who kill men, re-voiced. Global issue: <i>"Power and privilege"</i>.</p>
+</div>
+
+<h3>7 · Examiner-Style Questions</h3>
+<div class="card">
+<ul>
+<li>Why the hangover framing?</li>
+<li>How does the comic register change Salome's myth?</li>
+</ul>
+</div>
+
+<h3>8 · Close Reading (add once text supplied)</h3>
+<p>When you paste the poem, I will add quote-accurate key-passage notes and a vocab list.</p>`
+  },
+  /* ===================== 24 · Eurydice ===================== */
+  {
+    id:"eurydice",
+    title:"Eurydice",
+    author:"Carol Ann Duffy (b. 1955)",
+    context:"From <i>The World's Wife</i> (1999). In the Orpheus myth, Eurydice dies and is almost rescued from the underworld, but Orpheus looks back and loses her. Duffy's Eurydice is glad to be rid of him — she prefers the dead's quiet to his needy love.",
+    text:"（正文待补全 · 请把《Eurydice》全诗粘贴给我）",
+    keyPassages:[],
+    vocab:[],
+    analysis:`<h3>1 · Context & Big Picture</h3>
+<p><b>Eurydice</b> flips Ovid's most famous love story. Orpheus's descent is usually the test of devotion; Duffy's Eurydice finds his love smothering and is relieved when he fails. The underworld is peace; the living world is his demand.</p>
+<div class="card"><b>The single most important idea:</b> rescue is not always rescue — Eurydice chooses the grave's quiet over a husband's consuming love.</div>
+
+<h3>2 · Speaker, Voice & Tone</h3>
+<p>Calm, wry, released; <b>tone:</b> tender-in-reverse.</p>
+
+<h3>3 · Key Themes</h3>
+<h4>① Love as confinement</h4>
+<ul><li>His devotion is a leash she escapes by dying.</li></ul>
+<h4>② The afterlife as freedom</h4>
+<ul><li>Death is the only room of her own.</li></ul>
+
+<h3>4 · Poetic Devices</h3>
+<ul>
+<li><b>Intertext</b> — Ovid / Virgil's Orpheus and Eurydice.</li>
+<li><b>Dramatic monologue</b> — her side of the famous glance.</li>
+<li><b>Quiet imagery</b> — the dark, the flowers, the lack of him.</li>
+</ul>
+
+<h3>5 · Structure</h3>
+<p>Free verse, from the failed ascent to her contentment below.</p>
+
+<h3>6 · How to Use This for Your IB Essay</h3>
+<div class="card">
+<p><b>Thesis starter:</b> "Duffy's Eurydice rewrites the underworld as refuge: Orpheus's look back is not tragedy but release, for a wife freed from a love that owned her."</p>
+<p><b>Pairing:</b> with <i>Mrs Lazarus</i> — women for whom a man's return is violation. Global issue: <i>"Identity and belonging"</i>.</p>
+</div>
+
+<h3>7 · Examiner-Style Questions</h3>
+<div class="card">
+<ul>
+<li>Why does Eurydice prefer the underworld?</li>
+<li>How does the poem recast 'looking back'?</li>
+</ul>
+</div>
+
+<h3>8 · Close Reading (add once text supplied)</h3>
+<p>When you paste the poem, I will add quote-accurate key-passage notes and a vocab list.</p>`
+  },
+  /* ===================== 25 · The Kray Sisters ===================== */
+  {
+    id:"the-kray-sisters",
+    title:"The Kray Sisters",
+    author:"Carol Ann Duffy (b. 1955)",
+    context:"From <i>The World's Wife</i> (1999). The Kray twins were London gangsters; Duffy imagines them as sisters — a gender-swapped gangster ballad about violence, loyalty and East End myth.",
+    text:"（正文待补全 · 请把《The Kray Sisters》全诗粘贴给我）",
+    keyPassages:[],
+    vocab:[],
+    analysis:`<h3>1 · Context & Big Picture</h3>
+<p><b>The Kray Sisters</b> gender-flips the infamous twins into East End gangster sisters. Duffy uses the ballad form to ask how violence is coded male — and what changes, and what doesn't, when the criminals are women.</p>
+<div class="card"><b>The single most important idea:</b> swapping the gender exposes the romance built around male violence; the sisters get the same myth, and the myth looks different.</div>
+
+<h3>2 · Speaker, Voice & Tone</h3>
+<p>Balladic, tough, affectionate; <b>tone:</b> mock-heroic.</p>
+
+<h3>3 · Key Themes</h3>
+<h4>① Gender & the gangster myth</h4>
+<ul><li>Violence re-coded as sisterhood.</li></ul>
+<h4>② Class & loyalty</h4>
+<ul><li>East End belonging.</li></ul>
+
+<h3>4 · Poetic Devices</h3>
+<ul>
+<li><b>Ballad form / rhyme</b> — the traditional criminal song.</li>
+<li><b>Intertext</b> — the Kray twins' legend.</li>
+<li><b>Comic inversion</b> — the sisters' domestic touches.</li>
+</ul>
+
+<h3>5 · Structure</h3>
+<p>Rhymed stanzas, a ballad's rise and fall.</p>
+
+<h3>6 · How to Use This for Your IB Essay</h3>
+<div class="card">
+<p><b>Thesis starter:</b> "Duffy's Kray Sisters use ballad form to reveal how the gangster legend is gendered — sisterhood exposes the romance we grant male violence."</p>
+<p><b>Pairing:</b> with <i>Queen Kong</i> — camp gender-swaps. Global issue: <i>"Power and privilege"</i>.</p>
+</div>
+
+<h3>7 · Examiner-Style Questions</h3>
+<div class="card">
+<ul>
+<li>How does the ballad form shape the irony?</li>
+<li>What changes when the twins are sisters?</li>
+</ul>
+</div>
+
+<h3>8 · Close Reading (add once text supplied)</h3>
+<p>When you paste the poem, I will add quote-accurate key-passage notes and a vocab list.</p>`
+  },
+  /* ===================== 26 · Elvis's Twin Sister ===================== */
+  {
+    id:"elvis-twin-sister",
+    title:"Elvis's Twin Sister",
+    author:"Carol Ann Duffy (b. 1955)",
+    context:"From <i>The World's Wife</i> (1999). Elvis had a stillborn twin, Jesse; Duffy imagines the sister who lived instead — a meditation on fame, replacement, and the self never born.",
+    text:"（正文待补全 · 请把《Elvis's Twin Sister》全诗粘贴给我）",
+    keyPassages:[],
+    vocab:[],
+    analysis:`<h3>1 · Context & Big Picture</h3>
+<p><b>Elvis's Twin Sister</b> is a quiet, poignant poem. Elvis Presley was born a twin; Duffy imagines the sister who survived in his place and watches his myth from the shadows. It is about fame as a kind of substitution, and the self that fame erased.</p>
+<div class="card"><b>The single most important idea:</b> the twin lives as Elvis's echo — fame is built on a death, and the survivor is always almost him.</div>
+
+<h3>2 · Speaker, Voice & Tone</h3>
+<p>Wistful, plain; <b>tone:</b> elegiac, tender.</p>
+
+<h3>3 · Key Themes</h3>
+<h4>① Fame & substitution</h4>
+<ul><li>One life stands for two.</li></ul>
+<h4>② The unseen self</h4>
+<ul><li>The sister as the never-famous other.</li></ul>
+
+<h3>4 · Poetic Devices</h3>
+<ul>
+<li><b>Intertext</b> — Elvis biography (the stillborn twin).</li>
+<li><b>Free verse</b>, song-like.</li>
+<li><b>Mirror imagery</b> — twinning, reflection.</li>
+</ul>
+
+<h3>5 · Structure</h3>
+<p>Free verse, a lament that circles the brother's myth.</p>
+
+<h3>6 · How to Use This for Your IB Essay</h3>
+<div class="card">
+<p><b>Thesis starter:</b> "Duffy's twin sister makes Elvis's fame a substitution: the surviving sister is the self his stardom swallowed, and the poem listens for the voice fame drowned."</p>
+<p><b>Pairing:</b> with <i>Anne Hathaway</i> — the unseen person behind a famous name. Global issue: <i>"Identity and belonging"</i>.</p>
+</div>
+
+<h3>7 · Examiner-Style Questions</h3>
+<div class="card">
+<ul>
+<li>Why imagine the twin as a sister?</li>
+<li>What does fame 'replace' in the poem?</li>
+</ul>
+</div>
+
+<h3>8 · Close Reading (add once text supplied)</h3>
+<p>When you paste the poem, I will add quote-accurate key-passage notes and a vocab list.</p>`
+  },
+  /* ===================== 27 · Pope Joan ===================== */
+  {
+    id:"pope-joan",
+    title:"Pope Joan",
+    author:"Carol Ann Duffy (b. 1955)",
+    context:"From <i>The World's Wife</i> (1999). Legend holds that a woman disguised as a man became Pope in the Middle Ages, reigning until her sex was discovered. Duffy gives Pope Joan a voice — a fable about female erasure from history and the Church.",
+    text:"（正文待补全 · 请把《Pope Joan》全诗粘贴给我）",
+    keyPassages:[],
+    vocab:[],
+    analysis:`<h3>1 · Context & Big Picture</h3>
+<p><b>Pope Joan</b> draws on the medieval legend of a woman who ruled as pope in disguise. Duffy's Joan speaks of the bodily deception and its discovery — a story about how history writes women out, and what it costs to pass as a man to hold power.</p>
+<div class="card"><b>The single most important idea:</b> to lead, the woman must disappear as a woman; the poem is about the violence of being unseen at the top of power.</div>
+
+<h3>2 · Speaker, Voice & Tone</h3>
+<p>Resigned, acute; <b>tone:</b> historical, ironic.</p>
+
+<h3>3 · Key Themes</h3>
+<h4>① Female erasure</h4>
+<ul><li>The papacy can hold a woman only under a man's name.</li></ul>
+<h4>① The body & power</h4>
+<ul><li>The discovery is bodily — power fails at the flesh.</li></ul>
+
+<h3>4 · Poetic Devices</h3>
+<ul>
+<li><b>Intertext / legend</b> — the Pope Joan myth.</li>
+<li><b>Dramatic monologue</b> — her account of passing.</li>
+<li><b>Religious imagery</b> — the Church, the office.</li>
+</ul>
+
+<h3>5 · Structure</h3>
+<p>Free verse, from ascent to the fatal exposure.</p>
+
+<h3>6 · How to Use This for Your IB Essay</h3>
+<div class="card">
+<p><b>Thesis starter:</b> "Duffy's Pope Joan shows that the highest power is available to a woman only as disguise — the legend is history's admission that it erased her."</p>
+<p><b>Pairing:</b> with <i>Pygmalion's Bride</i> — women authored by men's systems. Global issue: <i>"Power and privilege"</i>.</p>
+</div>
+
+<h3>7 · Examiner-Style Questions</h3>
+<div class="card">
+<ul>
+<li>Why is the disguise necessary?</li>
+<li>How does the poem read the 'discovery'?</li>
+</ul>
+</div>
+
+<h3>8 · Close Reading (add once text supplied)</h3>
+<p>When you paste the poem, I will add quote-accurate key-passage notes and a vocab list.</p>`
+  },
+  /* ===================== 28 · Penelope ===================== */
+  {
+    id:"penelope",
+    title:"Penelope",
+    author:"Carol Ann Duffy (b. 1955)",
+    context:"From <i>The World's Wife</i> (1999). In the Odyssey, Penelope waits twenty years for Odysseus, weaving and unweaving a shroud. Duffy's Penelope is done waiting — and discovers herself in the weaving, not the husband.",
+    text:"（正文待补全 · 请把《Penelope》全诗粘贴给我）",
+    keyPassages:[],
+    vocab:[],
+    analysis:`<h3>1 · Context & Big Picture</h3>
+<p><b>Penelope</b> rereads the faithful wife. Homer's Penelope weaves by day and unmakes it by night to delay suitors; Duffy's Penelope finds in the weaving her own art and self, and quietly stops waiting for the hero. The loom becomes autonomy.</p>
+<div class="card"><b>The single most important idea:</b> the endless weaving is not just a trick — it is Penelope's own creation; in it she outgrows the husband she performs fidelity to.</div>
+
+<h3>2 · Speaker, Voice & Tone</h3>
+<p>Steady, inward; <b>tone:</b> reflective, freeing.</p>
+
+<h3>3 · Key Themes</h3>
+<h4>① Waiting as self-making</h4>
+<ul><li>The loom is her, not the husband.</li></ul>
+<h4>② Faithful wife reconsidered</h4>
+<ul><li>Loyalty becomes a cage she quietly leaves.</li></ul>
+
+<h3>4 · Poetic Devices</h3>
+<ul>
+<li><b>Intertext</b> — Homer's <i>Odyssey</i> (Penelope's web).</li>
+<li><b>Weaving as metaphor</b> — art, time, self.</li>
+<li><b>Dramatic monologue</b> — her inward turn.</li>
+</ul>
+
+<h3>5 · Structure</h3>
+<p>Free verse, from the famous ruse to her discovery of herself.</p>
+
+<h3>6 · How to Use This for Your IB Essay</h3>
+<div class="card">
+<p><b>Thesis starter:</b> "Duffy's Penelope turns the famous web from a ruse of fidelity into the making of a self: in the weaving she finds an art and an autonomy the absent hero cannot reach."</p>
+<p><b>Pairing:</b> with <i>Eurydice</i> — women who find themselves without the husband. Global issue: <i>"Identity and belonging"</i>.</p>
+</div>
+
+<h3>7 · Examiner-Style Questions</h3>
+<div class="card">
+<ul>
+<li>What does the weaving come to mean?</li>
+<li>Is Penelope still 'faithful' at the poem's end?</li>
+</ul>
+</div>
+
+<h3>8 · Close Reading (add once text supplied)</h3>
+<p>When you paste the poem, I will add quote-accurate key-passage notes and a vocab list.</p>`
+  },
+  /* ===================== 29 · Mrs Beast ===================== */
+  {
+    id:"mrs-beast",
+    title:"Mrs Beast",
+    author:"Carol Ann Duffy (b. 1955)",
+    context:"From <i>The World's Wife</i> (1999). A furious, joyful catalogue in which 'Mrs Beast' claims the strength and appetite denied to 'Beauty' — a triumphant close to the collection that celebrates the monstrous female as free.",
+    text:"（正文待补全 · 请把《Mrs Beast》全诗粘贴给我）",
+    keyPassages:[],
+    vocab:[],
+    analysis:`<h3>1 · Context & Big Picture</h3>
+<p><b>Mrs Beast</b> is the collection's defiant finale (in some editions paired near <i>Demeter</i>). Where fairy tales prize 'Beauty', Duffy's Mrs Beast embraces the beast — appetite, rage, size, desire — as liberation. It is the book's manifesto: the silenced monster speaks, and likes it.</p>
+<div class="card"><b>The single most important idea:</b> to be 'the beast' is to be free of Beauty's script; the poem celebrates female monstrosity as wholeness.</div>
+
+<h3>2 · Speaker, Voice & Tone</h3>
+<p>Roaring, joyful,Commanding; <b>tone:</b> triumphant, comic.</p>
+
+<h3>3 · Key Themes</h3>
+<h4>① Beauty vs Beast</h4>
+<ul><li>The beast chooses herself over the prize of being looked at.</li></ul>
+<h4>② Female appetite & rage</h4>
+<ul><li>Hunger, strength, desire as freedom.</li></ul>
+
+<h3>4 · Poetic Devices</h3>
+<ul>
+<li><b>Anaphora / catalogue</b> — a litany of beasts claimed.</li>
+<li><b>Intertext</b> — Beauty and the Beast, and the whole collection's monsters.</li>
+<li><b>Dramatic monologue</b> — a manifesto voice.</li>
+</ul>
+
+<h3>5 · Structure</h3>
+<p>Free verse with a rising, chant-like list to a roar of an ending.</p>
+
+<h3>6 · How to Use This for Your IB Essay</h3>
+<div class="card">
+<p><b>Thesis starter:</b> "As the collection's climax, <i>Mrs Beast</i> rejects Beauty for the beast: female monstrosity becomes the freedom the earlier monologues only glimpse."</p>
+<p><b>Pairing:</b> with <i>Medusa</i> / <i>Queen Kong</i> — monsters who own their voices. Global issue: <i>"Power and privilege"</i>.</p>
+</div>
+
+<h3>7 · Examiner-Style Questions</h3>
+<div class="card">
+<ul>
+<li>Why end the book with 'the beast'?</li>
+<li>What does 'beast' free the speaker from?</li>
+</ul>
+</div>
+
+<h3>8 · Close Reading (add once text supplied)</h3>
+<p>When you paste the poem, I will add quote-accurate key-passage notes and a vocab list.</p>`
+  },
+  /* ===================== 30 · Demeter ===================== */
+  {
+    id:"demeter",
+    title:"Demeter",
+    author:"Carol Ann Duffy (b. 1955)",
+    context:"From <i>The World's Wife</i> (1999). The goddess of the harvest, whose daughter Persephone is taken by Hades, speaks of loss and the turning seasons. Duffy closes the collection with a mother's grief — and the earth's winter as her mourning.",
+    text:"（正文待补全 · 请把《Demeter》全诗粘贴给我）",
+    keyPassages:[],
+    vocab:[],
+    analysis:`<h3>1 · Context & Big Picture</h3>
+<p><b>Demeter</b> is the collection's final poem. The myth: Persephone is abducted to the underworld; her mother's grief makes the earth barren each winter. Duffy's Demeter is a mourning mother whose love literally changes the world — a close centred on loss, season, and the bond between women.</p>
+<div class="card"><b>The single most important idea:</b> a mother's grief is written into nature itself; the seasons are one woman's love and loss, and the collection ends on the bond between mother and daughter.</div>
+
+<h3>2 · Speaker, Voice & Tone</h3>
+<p>Magnificent, mourning; <b>tone:</b> elegaic, elemental.</p>
+
+<h3>3 · Key Themes</h3>
+<h4>① Mother–daughter love</h4>
+<ul><li>The bond that seasons obey.</li></ul>
+<h4>② Loss & the natural world</h4>
+<ul><li>Winter as grief made visible.</li></ul>
+
+<h3>4 · Poetic Devices</h3>
+<ul>
+<li><b>Intertext</b> — the Homeric Hymn to Demeter.</li>
+<li><b>Personification / pathetic fallacy</b> — the earth feels her loss.</li>
+<li><b>Seasonal imagery</b> — seed, dark, return.</li>
+<li><b>Free verse</b> with a hymn-like lift.</li>
+</ul>
+
+<h3>5 · Structure</h3>
+<p>Free verse, from the taking of Persephone to the bargain of the seasons and a mother's enduring wait.</p>
+
+<h3>6 · How to Use This for Your IB Essay</h3>
+<div class="card">
+<p><b>Thesis starter:</b> "Duffy's <i>Demeter</i> ends the collection with a mother's grief made cosmic: the seasons are one woman's love for her daughter, and the book closes on female bond rather than male myth."</p>
+<p><b>Pairing:</b> with <i>Little Red-Cap</i> — bookends of female growth and love. Global issue: <i>"Identity and belonging"</i>.</p>
+</div>
+
+<h3>7 · Examiner-Style Questions</h3>
+<div class="card">
+<ul>
+<li>How does the poem make grief 'natural'?</li>
+<li>Why close the collection on a mother and daughter?</li>
+</ul>
+</div>
+
+<h3>8 · Close Reading (add once text supplied)</h3>
+<p>When you paste the poem, I will add quote-accurate key-passage notes and a vocab list.</p>`
+  },
+]
+};
+
+/* ============================ STATE ============================ */
+const LS_KEY="englitlab_v1";
+let state = load();
+let currentPoem = state.poems[0] ? state.poems[0].id : null;
+let currentView = "read";
+let pendingSel = null; // {text, rect}
+
+function freshSeed(){
+  const s = { poems: JSON.parse(JSON.stringify(SEED.poems)), annotations:{}, vocab:[], api:{provider:"mymemory", baiduAppid:"", baiduKey:""} };
+  const vids = new Set();
+  SEED.poems.forEach(sp=> (sp.vocab||[]).forEach(v=>{ if(v&&v.word&&!vids.has(v.word)){ s.vocab.push(JSON.parse(JSON.stringify(v))); vids.add(v.word); } }));
+  return s;
+}
+function load(){
+  let s=null;
+  try{
+    const raw = localStorage.getItem(LS_KEY);
+    if(raw){ const p=JSON.parse(raw); if(p&&p.poems) s=p; }
+  }catch(e){}
+  if(!s||!s.poems){ return freshSeed(); }
+  const ids = new Set(s.poems.map(p=>p.id));
+  SEED.poems.forEach(sp=>{ if(!ids.has(sp.id)){ s.poems.push(JSON.parse(JSON.stringify(sp))); ids.add(sp.id); } });
+  s.vocab = s.vocab||[];
+  const vids = new Set(s.vocab.map(v=>v.word));
+  SEED.poems.forEach(sp=> (sp.vocab||[]).forEach(v=>{ if(v&&v.word&&!vids.has(v.word)){ s.vocab.push(JSON.parse(JSON.stringify(v))); vids.add(v.word); } }));
+  if(!s.api) s.api={provider:"mymemory",baiduAppid:"",baiduKey:""};
+  return s;
+}
+function save(){ try{ localStorage.setItem(LS_KEY, JSON.stringify(state)); }catch(e){} }
+function getPoem(id){ return state.poems.find(p=>p.id===id); }
+
+/* ============================ RENDER ============================ */
+function render(){
+  renderList();
+  const p = getPoem(currentPoem);
+  if(!p){ document.getElementById("poemBox").innerHTML='<div class="empty">No poems yet — click “Add poem” at the top right.</div>'; return; }
+  // read
+  document.getElementById("rTitle").textContent = p.title;
+  document.getElementById("rBy").innerHTML = p.author + (p.context?(" · "+p.context):"");
+  renderPoem(p);
+  // analysis
+  document.getElementById("aTitle").textContent = p.title;
+  document.getElementById("aBy").innerHTML = p.author + (p.context?(" · "+p.context):"");
+  document.getElementById("analysisBox").innerHTML = p.analysis || '<div class="empty">No analysis for this poem yet — go to Read &amp; Annotate and add your own notes.</div>';
+  // keys
+  document.getElementById("kTitle").textContent = p.title;
+  renderKeys(p);
+  // vocab
+  renderVocab();
+  save();
+}
+function renderList(){
+  const box = document.getElementById("poemList"); box.innerHTML="";
+  state.poems.forEach(p=>{
+    const d=document.createElement("div");
+    d.className="poem-item"+(p.id===currentPoem?" active":"");
+    d.innerHTML='<div class="t">'+esc(p.title)+'</div><div class="a">'+esc(p.author||"")+'</div>'+
+      (p.keyPassages&&p.keyPassages.length?'<span class="badge">Annotated ✓</span>':(p.analysis?'<span class="badge">Analysis</span>':''));
+    d.onclick=()=>{ currentPoem=p.id; switchView("read"); render(); };
+    box.appendChild(d);
+  });
+}
+function renderPoem(p){
+  const box=document.getElementById("poemBox"); box.innerHTML="";
+  const lines = p.text.split("\n");
+  lines.forEach((line,i)=>{
+    if(line.trim()===""){ const g=document.createElement("div"); g.className="gap"; box.appendChild(g); return; }
+    const div=document.createElement("div"); div.className="line";
+    div.innerHTML = buildLineHtml(line, collectMarks(line,p));
+    box.appendChild(div);
+  });
+}
+function collectMarks(line,p){
+  const marks=[];
+  const add=(phrase,cls,id,note,noteZh)=>{
+    let idx=0;
+    while((idx=line.indexOf(phrase,idx))!==-1){
+      marks.push({start:idx,end:idx+phrase.length,cls,id,note,noteZh});
+      idx+=phrase.length;
+    }
+  };
+  (p.keyPassages||[]).forEach((kp,ki)=>{
+    kp.text.split("\n").forEach(seg=>{ if(seg.trim()) add(seg,"kp","kp"+ki,kp.note,kp.noteZh); });
+  });
+  (state.annotations[p.id]||[]).forEach((a,ai)=>{
+    a.text.split("\n").forEach(seg=>{ if(seg.trim()) add(seg,"ann","ann"+ai,a.note,""); });
+  });
+  marks.sort((x,y)=>x.start-y.start);
+  return marks;
+}
+function buildLineHtml(line,marks){
+  let html="", i=0;
+  for(const m of marks){
+    if(m.start < i) continue; // skip overlap
+    html += esc(line.slice(i,m.start));
+    html += '<mark class="'+m.cls+'" data-id="'+m.id+'" tabindex="0">'+esc(line.slice(m.start,m.end))+'</mark>';
+    i = m.end;
+  }
+  html += esc(line.slice(i));
+  return html;
+}
+function renderKeys(p){
+  const box=document.getElementById("keysBox"); box.innerHTML="";
+  if(!p.keyPassages||!p.keyPassages.length){ box.innerHTML='<div class="empty">No teacher-annotated key lines for this poem yet.</div>'; return; }
+  p.keyPassages.forEach((kp,ki)=>{
+    const card=document.createElement("div"); card.className="card";
+    card.innerHTML='<div class="pquote">“'+esc(kp.text)+'”</div>'+
+      '<div class="ptext">'+kp.note+'</div>'+
+      (kp.noteZh?'<div class="pzh">'+kp.noteZh+'</div>':'');
+    card.style.cursor="pointer";
+    card.onclick=()=>{ switchView("read"); render(); setTimeout(()=>flashMark("kp"+ki),60); };
+    box.appendChild(card);
+  });
+}
+function renderVocab(){
+  const box=document.getElementById("vocabBox"); box.innerHTML="";
+  if(!state.vocab.length){ box.innerHTML='<div class="empty">Your Vocab is empty. Select text in the poem and click “Vocab” to add.</div>'; return; }
+  state.vocab.forEach((v,vi)=>{
+    const row=document.createElement("div"); row.className="vrow";
+    row.innerHTML='<div class="w">'+esc(v.word)+'</div>'+
+      (v.ex?'<div class="ex">“'+esc(v.ex)+'”</div>':'')+
+      (v.note?'<div class="ex">Note: '+esc(v.note)+'</div>':'')+'</div>'+
+      '<div class="del"><button class="btn tiny" data-vi="'+vi+'">Delete</button></div>';
+    box.appendChild(row);
+  });
+  box.querySelectorAll("[data-vi]").forEach(b=>{
+    b.onclick=()=>{ state.vocab.splice(+b.dataset.vi,1); renderVocab(); save(); };
+  });
+}
+function flashMark(id){
+  const el=document.querySelector('mark[data-id="'+id+'"]');
+  if(el){ el.scrollIntoView({behavior:"smooth",block:"center"});
+    el.style.transition="background .4s"; el.style.background="#ffd166";
+    setTimeout(()=>{ el.style.background=""; },900); }
+}
+
+/* ============================ SELECTION TOOLBAR ============================ */
+const selbar=document.getElementById("selbar");
+function positionSelbar(rect){
+  selbar.style.display="flex";
+  const sbW=selbar.offsetWidth||180, sbH=selbar.offsetHeight||40;
+  const vw=window.innerWidth, vh=window.innerHeight;
+  let top=rect.top-sbH-8;
+  if(top<8) top=rect.bottom+8;
+  if(top+sbH>vh-8) top=vh-sbH-8;
+  if(top<8) top=8;
+  let left=rect.left+rect.width/2-sbW/2;
+  if(left+sbW>vw-8) left=vw-sbW-8;
+  if(left<8) left=8;
+  selbar.style.top=top+"px"; selbar.style.left=left+"px";
+}
+document.getElementById("poemBox").addEventListener("mouseup",e=>{
+  const sel=window.getSelection();
+  const txt=sel?sel.toString().trim():"";
+  if(txt && sel.anchorNode && document.getElementById("poemBox").contains(sel.anchorNode)){
+    const rect=sel.getRangeAt(0).getBoundingClientRect();
+    pendingSel={text:txt, rect};
+    positionSelbar(rect);
+  }
+});
+document.addEventListener("mousedown",e=>{
+  if(!selbar.contains(e.target) && !document.getElementById("poemBox").contains(e.target)) selbar.style.display="none";
+  hidePop();
+});
+document.getElementById("sbAnn").onclick=()=>{ if(pendingSel) openAnnotate(pendingSel.text); selbar.style.display="none"; };
+document.getElementById("sbTr").onclick=()=>{ if(pendingSel) translateAndShow(pendingSel.text); selbar.style.display="none"; };
+document.getElementById("sbVoc").onclick=()=>{ if(pendingSel) openVocabAdd(pendingSel.text); selbar.style.display="none"; };
+
+/* ============================ POPOVER (marks) ============================ */
+function wordAtPoint(x,y){
+  let range=null;
+  if(document.caretRangeFromPoint){ range=document.caretRangeFromPoint(x,y); }
+  else if(document.caretPositionFromPoint){ const cp=document.caretPositionFromPoint(x,y);
+    if(cp){ range=document.createRange(); range.setStart(cp.offsetNode,cp.offset); range.collapse(true); } }
+  if(!range) return null;
+  const node=range.startContainer;
+  if(node.nodeType!==3) return null;
+  const text=node.textContent; let off=range.startOffset, s=off, e=off;
+  while(s>0 && /\S/.test(text[s-1])) s--;
+  while(e<text.length && /\S/.test(text[e])) e++;
+  const word=text.slice(s,e); if(!word.trim()) return null;
+  const r=document.createRange(); r.setStart(node,s); r.setEnd(node,e);
+  return {word, rect:r.getBoundingClientRect()};
+}
+document.getElementById("poemBox").addEventListener("click",e=>{
+  const mk=e.target.closest("mark");
+  if(mk){
+    const p=getPoem(currentPoem);
+    if(mk.classList.contains("kp")){
+      const kp=p.keyPassages[+mk.dataset.id.replace("kp","")];
+      showPop(mk,"kp","Key line · Teacher note", kp.text, kp.note, "", null);
+    } else {
+      const ai=+mk.dataset.id.replace("ann","");
+      const a=(state.annotations[p.id]||[])[ai];
+      showPop(mk,"ann","Your annotation", a.text, a.note, "",
+        {label:"Delete note", fn:()=>{ state.annotations[p.id].splice(ai,1); render(); hidePop(); }});
+    }
+    return;
+  }
+  const sel=window.getSelection();
+  if(sel && !sel.isCollapsed) return;
+  const w=wordAtPoint(e.clientX,e.clientY);
+  if(w){ pendingSel={text:w.word, rect:w.rect}; positionSelbar(w.rect); }
+  else { selbar.style.display="none"; }
+});
+const pop=document.getElementById("pop");
+function showPop(anchor,kind,tag,quote,text,zh,action){
+  document.getElementById("popTag").textContent=tag;
+  document.getElementById("popTag").className="ptag "+kind;
+  document.getElementById("popQuote").textContent="“"+quote+"”";
+  document.getElementById("popText").textContent=text||"";
+  document.getElementById("popZh").textContent=zh||"";
+  document.getElementById("popZh").style.display=zh?"block":"none";
+  const act=document.getElementById("popAct"); act.innerHTML="";
+  if(action){ const b=document.createElement("button"); b.className="btn tiny"; b.textContent=action.label;
+    b.onclick=action.fn; act.appendChild(b); }
+  pop.style.display="block";
+  const r=anchor.getBoundingClientRect();
+  const ph=pop.offsetHeight||120, pw=pop.offsetWidth||340;
+  const vw=window.innerWidth, vh=window.innerHeight;
+  let top=r.bottom+8;
+  if(top+ph>vh-8) top=r.top-ph-8;
+  if(top<8) top=8;
+  let left=r.left;
+  if(left+pw>vw-8) left=vw-pw-8;
+  if(left<8) left=8;
+  pop.style.top=top+"px"; pop.style.left=left+"px";
+}
+function hidePop(){ pop.style.display="none"; }
+
+/* ============================ ANNOTATE / VOCAB MODALS ============================ */
+const modalBg=document.getElementById("modalBg"), modalBox=document.getElementById("modalBox");
+function openModal(html){ modalBox.innerHTML=html; modalBg.classList.add("show"); }
+function closeModal(){ modalBg.classList.remove("show"); }
+modalBg.addEventListener("click",e=>{ if(e.target===modalBg) closeModal(); });
+
+function openAnnotate(text){
+  openModal('<h3>✍ Add annotation</h3>'+
+    '<label>Selected text</label><textarea id="mSel" readonly>'+esc(text)+'</textarea>'+
+    '<label>Your note</label><textarea id="mNote" placeholder="Write your understanding, analysis, or questions…"></textarea>'+
+    '<div class="row"><button class="btn" id="mCancel">Cancel</button>'+
+    '<button class="btn primary" id="mSave">Save</button></div>');
+  document.getElementById("mCancel").onclick=closeModal;
+  document.getElementById("mSave").onclick=()=>{
+    const note=document.getElementById("mNote").value.trim();
+    if(!note){ alert("Please write a note first"); return; }
+    if(!state.annotations[currentPoem]) state.annotations[currentPoem]=[];
+    state.annotations[currentPoem].push({text, note, createdAt:Date.now()});
+    closeModal(); render();
+  };
+}
+function openVocabAdd(text){
+  openModal('<h3>📘 Add to Vocab</h3>'+
+    '<label>Word</label><input id="vWord" value="'+esc(text)+'" />'+
+    '<label>Example (optional)</label><input id="vEx" placeholder="Example from poem" />'+
+    '<label>Note (optional)</label><textarea id="vNote" placeholder="Usage, associations…"></textarea>'+
+    '<div class="row"><button class="btn" id="vCancel">Cancel</button>'+
+    '<button class="btn primary" id="vSave">Save</button></div>');
+  document.getElementById("vCancel").onclick=closeModal;
+  document.getElementById("vSave").onclick=()=>{
+    const word=document.getElementById("vWord").value.trim();
+    if(!word){ alert("Please enter a word"); return; }
+    state.vocab.unshift({word, tr:"", ex:document.getElementById("vEx").value.trim(), note:document.getElementById("vNote").value.trim()});
+    closeModal(); renderVocab(); save(); switchView("vocab");
+  };
+}
+
+/* ============================ TRANSLATE (EN -> ZH) ============================ */
+async function translate(text){
+  text=text.trim(); if(!text) return "";
+  const api=state.api||{provider:"mymemory"};
+  if(api.provider==="baidu" && api.baiduAppid && api.baiduKey){
+    try{ return await translateBaidu(text, api); }catch(e){ return "(Baidu translation error: "+e.message+")"; }
+  }
+  // MyMemory (free, keyless, CORS-enabled, generally reachable in China)
+  try{
+    const url="https://api.mymemory.translated.net/get?q="+encodeURIComponent(text)+"&langpair=en|zh-CN";
+    const r=await fetch(url); const j=await r.json();
+    let t=j&&j.responseData&&j.responseData.translatedText;
+    if(t && !/MYMEMORY WARNING|QUOTA|INVALID/.test(t)) return t;
+    // fallback: unofficial google endpoint (blocked in mainland China, but works abroad)
+    return await translateGtx(text);
+  }catch(e){
+    try{ return await translateGtx(text); }catch(e2){ return "(Translation needs internet — please check your connection)"; }
+  }
+}
+async function translateGtx(text){
+  const url="https://translate.googleapis.com/translate_a/single?client=gtx&sl=en&tl=zh-CN&dt=t&q="+encodeURIComponent(text);
+  const r=await fetch(url); const j=await r.json();
+  return j[0].map(x=>x[0]).join("");
+}
+async function translateBaidu(text,api){
+  const q=text.slice(0,2000);
+  const salt=Date.now();
+  const sign=md5(api.baiduAppid+q+salt+api.baiduKey);
+  const url="https://fanyi-api.baidu.com/api/trans/vip/translate?q="+encodeURIComponent(q)+
+    "&from=en&to=zh&appid="+encodeURIComponent(api.baiduAppid)+"&salt="+salt+"&sign="+sign;
+  const r=await fetch(url); const j=await r.json();
+  if(j.error_code) throw new Error(j.error_msg||j.error_code);
+  return j.trans_result.map(x=>x.dst).join("\n");
+}
+async function translateAndShow(text){
+  const t=await translate(text);
+  showPop({getBoundingClientRect:()=>({bottom:pendingSel.rect.bottom,left:pendingSel.rect.left,top:pendingSel.rect.top})},
+    "ann","🌐 Translation", text, t, "",
+    {label:"＋ Add to Vocab", fn:()=>{ openVocabAdd(text); document.getElementById("vTr")&&(document.getElementById("vTr").value=t); }});
+}
+
+/* ---- MD5 (blueimp, correct) for Baidu API sign ---- */
+/*
+ * JavaScript MD5
+ * https://github.com/blueimp/JavaScript-MD5
+ *
+ * Copyright 2011, Sebastian Tschan
+ * https://blueimp.net
+ *
+ * Licensed under the MIT license:
+ * https://opensource.org/licenses/MIT
+ *
+ * Based on
+ * A JavaScript implementation of the RSA Data Security, Inc. MD5 Message
+ * Digest Algorithm, as defined in RFC 1321.
+ * Version 2.2 Copyright (C) Paul Johnston 1999 - 2009
+ * Other contributors: Greg Holt, Andrew Kepert, Ydnar, Lostinet
+ * Distributed under the BSD License
+ * See http://pajhome.org.uk/crypt/md5 for more info.
+ */
+
+/* global define */
+
+/* eslint-disable strict */
+
+;(function ($) {
+  'use strict'
+
+  /**
+   * Add integers, wrapping at 2^32.
+   * This uses 16-bit operations internally to work around bugs in interpreters.
+   *
+   * @param {number} x First integer
+   * @param {number} y Second integer
+   * @returns {number} Sum
+   */
+  function safeAdd(x, y) {
+    var lsw = (x & 0xffff) + (y & 0xffff)
+    var msw = (x >> 16) + (y >> 16) + (lsw >> 16)
+    return (msw << 16) | (lsw & 0xffff)
+  }
+
+  /**
+   * Bitwise rotate a 32-bit number to the left.
+   *
+   * @param {number} num 32-bit number
+   * @param {number} cnt Rotation count
+   * @returns {number} Rotated number
+   */
+  function bitRotateLeft(num, cnt) {
+    return (num << cnt) | (num >>> (32 - cnt))
+  }
+
+  /**
+   * Basic operation the algorithm uses.
+   *
+   * @param {number} q q
+   * @param {number} a a
+   * @param {number} b b
+   * @param {number} x x
+   * @param {number} s s
+   * @param {number} t t
+   * @returns {number} Result
+   */
+  function md5cmn(q, a, b, x, s, t) {
+    return safeAdd(bitRotateLeft(safeAdd(safeAdd(a, q), safeAdd(x, t)), s), b)
+  }
+  /**
+   * Basic operation the algorithm uses.
+   *
+   * @param {number} a a
+   * @param {number} b b
+   * @param {number} c c
+   * @param {number} d d
+   * @param {number} x x
+   * @param {number} s s
+   * @param {number} t t
+   * @returns {number} Result
+   */
+  function md5ff(a, b, c, d, x, s, t) {
+    return md5cmn((b & c) | (~b & d), a, b, x, s, t)
+  }
+  /**
+   * Basic operation the algorithm uses.
+   *
+   * @param {number} a a
+   * @param {number} b b
+   * @param {number} c c
+   * @param {number} d d
+   * @param {number} x x
+   * @param {number} s s
+   * @param {number} t t
+   * @returns {number} Result
+   */
+  function md5gg(a, b, c, d, x, s, t) {
+    return md5cmn((b & d) | (c & ~d), a, b, x, s, t)
+  }
+  /**
+   * Basic operation the algorithm uses.
+   *
+   * @param {number} a a
+   * @param {number} b b
+   * @param {number} c c
+   * @param {number} d d
+   * @param {number} x x
+   * @param {number} s s
+   * @param {number} t t
+   * @returns {number} Result
+   */
+  function md5hh(a, b, c, d, x, s, t) {
+    return md5cmn(b ^ c ^ d, a, b, x, s, t)
+  }
+  /**
+   * Basic operation the algorithm uses.
+   *
+   * @param {number} a a
+   * @param {number} b b
+   * @param {number} c c
+   * @param {number} d d
+   * @param {number} x x
+   * @param {number} s s
+   * @param {number} t t
+   * @returns {number} Result
+   */
+  function md5ii(a, b, c, d, x, s, t) {
+    return md5cmn(c ^ (b | ~d), a, b, x, s, t)
+  }
+
+  /**
+   * Calculate the MD5 of an array of little-endian words, and a bit length.
+   *
+   * @param {Array} x Array of little-endian words
+   * @param {number} len Bit length
+   * @returns {Array<number>} MD5 Array
+   */
+  function binlMD5(x, len) {
+    /* append padding */
+    x[len >> 5] |= 0x80 << len % 32
+    x[(((len + 64) >>> 9) << 4) + 14] = len
+
+    var i
+    var olda
+    var oldb
+    var oldc
+    var oldd
+    var a = 1732584193
+    var b = -271733879
+    var c = -1732584194
+    var d = 271733878
+
+    for (i = 0; i < x.length; i += 16) {
+      olda = a
+      oldb = b
+      oldc = c
+      oldd = d
+
+      a = md5ff(a, b, c, d, x[i], 7, -680876936)
+      d = md5ff(d, a, b, c, x[i + 1], 12, -389564586)
+      c = md5ff(c, d, a, b, x[i + 2], 17, 606105819)
+      b = md5ff(b, c, d, a, x[i + 3], 22, -1044525330)
+      a = md5ff(a, b, c, d, x[i + 4], 7, -176418897)
+      d = md5ff(d, a, b, c, x[i + 5], 12, 1200080426)
+      c = md5ff(c, d, a, b, x[i + 6], 17, -1473231341)
+      b = md5ff(b, c, d, a, x[i + 7], 22, -45705983)
+      a = md5ff(a, b, c, d, x[i + 8], 7, 1770035416)
+      d = md5ff(d, a, b, c, x[i + 9], 12, -1958414417)
+      c = md5ff(c, d, a, b, x[i + 10], 17, -42063)
+      b = md5ff(b, c, d, a, x[i + 11], 22, -1990404162)
+      a = md5ff(a, b, c, d, x[i + 12], 7, 1804603682)
+      d = md5ff(d, a, b, c, x[i + 13], 12, -40341101)
+      c = md5ff(c, d, a, b, x[i + 14], 17, -1502002290)
+      b = md5ff(b, c, d, a, x[i + 15], 22, 1236535329)
+
+      a = md5gg(a, b, c, d, x[i + 1], 5, -165796510)
+      d = md5gg(d, a, b, c, x[i + 6], 9, -1069501632)
+      c = md5gg(c, d, a, b, x[i + 11], 14, 643717713)
+      b = md5gg(b, c, d, a, x[i], 20, -373897302)
+      a = md5gg(a, b, c, d, x[i + 5], 5, -701558691)
+      d = md5gg(d, a, b, c, x[i + 10], 9, 38016083)
+      c = md5gg(c, d, a, b, x[i + 15], 14, -660478335)
+      b = md5gg(b, c, d, a, x[i + 4], 20, -405537848)
+      a = md5gg(a, b, c, d, x[i + 9], 5, 568446438)
+      d = md5gg(d, a, b, c, x[i + 14], 9, -1019803690)
+      c = md5gg(c, d, a, b, x[i + 3], 14, -187363961)
+      b = md5gg(b, c, d, a, x[i + 8], 20, 1163531501)
+      a = md5gg(a, b, c, d, x[i + 13], 5, -1444681467)
+      d = md5gg(d, a, b, c, x[i + 2], 9, -51403784)
+      c = md5gg(c, d, a, b, x[i + 7], 14, 1735328473)
+      b = md5gg(b, c, d, a, x[i + 12], 20, -1926607734)
+
+      a = md5hh(a, b, c, d, x[i + 5], 4, -378558)
+      d = md5hh(d, a, b, c, x[i + 8], 11, -2022574463)
+      c = md5hh(c, d, a, b, x[i + 11], 16, 1839030562)
+      b = md5hh(b, c, d, a, x[i + 14], 23, -35309556)
+      a = md5hh(a, b, c, d, x[i + 1], 4, -1530992060)
+      d = md5hh(d, a, b, c, x[i + 4], 11, 1272893353)
+      c = md5hh(c, d, a, b, x[i + 7], 16, -155497632)
+      b = md5hh(b, c, d, a, x[i + 10], 23, -1094730640)
+      a = md5hh(a, b, c, d, x[i + 13], 4, 681279174)
+      d = md5hh(d, a, b, c, x[i], 11, -358537222)
+      c = md5hh(c, d, a, b, x[i + 3], 16, -722521979)
+      b = md5hh(b, c, d, a, x[i + 6], 23, 76029189)
+      a = md5hh(a, b, c, d, x[i + 9], 4, -640364487)
+      d = md5hh(d, a, b, c, x[i + 12], 11, -421815835)
+      c = md5hh(c, d, a, b, x[i + 15], 16, 530742520)
+      b = md5hh(b, c, d, a, x[i + 2], 23, -995338651)
+
+      a = md5ii(a, b, c, d, x[i], 6, -198630844)
+      d = md5ii(d, a, b, c, x[i + 7], 10, 1126891415)
+      c = md5ii(c, d, a, b, x[i + 14], 15, -1416354905)
+      b = md5ii(b, c, d, a, x[i + 5], 21, -57434055)
+      a = md5ii(a, b, c, d, x[i + 12], 6, 1700485571)
+      d = md5ii(d, a, b, c, x[i + 3], 10, -1894986606)
+      c = md5ii(c, d, a, b, x[i + 10], 15, -1051523)
+      b = md5ii(b, c, d, a, x[i + 1], 21, -2054922799)
+      a = md5ii(a, b, c, d, x[i + 8], 6, 1873313359)
+      d = md5ii(d, a, b, c, x[i + 15], 10, -30611744)
+      c = md5ii(c, d, a, b, x[i + 6], 15, -1560198380)
+      b = md5ii(b, c, d, a, x[i + 13], 21, 1309151649)
+      a = md5ii(a, b, c, d, x[i + 4], 6, -145523070)
+      d = md5ii(d, a, b, c, x[i + 11], 10, -1120210379)
+      c = md5ii(c, d, a, b, x[i + 2], 15, 718787259)
+      b = md5ii(b, c, d, a, x[i + 9], 21, -343485551)
+
+      a = safeAdd(a, olda)
+      b = safeAdd(b, oldb)
+      c = safeAdd(c, oldc)
+      d = safeAdd(d, oldd)
+    }
+    return [a, b, c, d]
+  }
+
+  /**
+   * Convert an array of little-endian words to a string
+   *
+   * @param {Array<number>} input MD5 Array
+   * @returns {string} MD5 string
+   */
+  function binl2rstr(input) {
+    var i
+    var output = ''
+    var length32 = input.length * 32
+    for (i = 0; i < length32; i += 8) {
+      output += String.fromCharCode((input[i >> 5] >>> i % 32) & 0xff)
+    }
+    return output
+  }
+
+  /**
+   * Convert a raw string to an array of little-endian words
+   * Characters >255 have their high-byte silently ignored.
+   *
+   * @param {string} input Raw input string
+   * @returns {Array<number>} Array of little-endian words
+   */
+  function rstr2binl(input) {
+    var i
+    var output = []
+    output[(input.length >> 2) - 1] = undefined
+    for (i = 0; i < output.length; i += 1) {
+      output[i] = 0
+    }
+    var length8 = input.length * 8
+    for (i = 0; i < length8; i += 8) {
+      output[i >> 5] |= (input.charCodeAt(i / 8) & 0xff) << i % 32
+    }
+    return output
+  }
+
+  /**
+   * Calculate the MD5 of a raw string
+   *
+   * @param {string} s Input string
+   * @returns {string} Raw MD5 string
+   */
+  function rstrMD5(s) {
+    return binl2rstr(binlMD5(rstr2binl(s), s.length * 8))
+  }
+
+  /**
+   * Calculates the HMAC-MD5 of a key and some data (raw strings)
+   *
+   * @param {string} key HMAC key
+   * @param {string} data Raw input string
+   * @returns {string} Raw MD5 string
+   */
+  function rstrHMACMD5(key, data) {
+    var i
+    var bkey = rstr2binl(key)
+    var ipad = []
+    var opad = []
+    var hash
+    ipad[15] = opad[15] = undefined
+    if (bkey.length > 16) {
+      bkey = binlMD5(bkey, key.length * 8)
+    }
+    for (i = 0; i < 16; i += 1) {
+      ipad[i] = bkey[i] ^ 0x36363636
+      opad[i] = bkey[i] ^ 0x5c5c5c5c
+    }
+    hash = binlMD5(ipad.concat(rstr2binl(data)), 512 + data.length * 8)
+    return binl2rstr(binlMD5(opad.concat(hash), 512 + 128))
+  }
+
+  /**
+   * Convert a raw string to a hex string
+   *
+   * @param {string} input Raw input string
+   * @returns {string} Hex encoded string
+   */
+  function rstr2hex(input) {
+    var hexTab = '0123456789abcdef'
+    var output = ''
+    var x
+    var i
+    for (i = 0; i < input.length; i += 1) {
+      x = input.charCodeAt(i)
+      output += hexTab.charAt((x >>> 4) & 0x0f) + hexTab.charAt(x & 0x0f)
+    }
+    return output
+  }
+
+  /**
+   * Encode a string as UTF-8
+   *
+   * @param {string} input Input string
+   * @returns {string} UTF8 string
+   */
+  function str2rstrUTF8(input) {
+    return unescape(encodeURIComponent(input))
+  }
+
+  /**
+   * Encodes input string as raw MD5 string
+   *
+   * @param {string} s Input string
+   * @returns {string} Raw MD5 string
+   */
+  function rawMD5(s) {
+    return rstrMD5(str2rstrUTF8(s))
+  }
+  /**
+   * Encodes input string as Hex encoded string
+   *
+   * @param {string} s Input string
+   * @returns {string} Hex encoded string
+   */
+  function hexMD5(s) {
+    return rstr2hex(rawMD5(s))
+  }
+  /**
+   * Calculates the raw HMAC-MD5 for the given key and data
+   *
+   * @param {string} k HMAC key
+   * @param {string} d Input string
+   * @returns {string} Raw MD5 string
+   */
+  function rawHMACMD5(k, d) {
+    return rstrHMACMD5(str2rstrUTF8(k), str2rstrUTF8(d))
+  }
+  /**
+   * Calculates the Hex encoded HMAC-MD5 for the given key and data
+   *
+   * @param {string} k HMAC key
+   * @param {string} d Input string
+   * @returns {string} Raw MD5 string
+   */
+  function hexHMACMD5(k, d) {
+    return rstr2hex(rawHMACMD5(k, d))
+  }
+
+  /**
+   * Calculates MD5 value for a given string.
+   * If a key is provided, calculates the HMAC-MD5 value.
+   * Returns a Hex encoded string unless the raw argument is given.
+   *
+   * @param {string} string Input string
+   * @param {string} [key] HMAC key
+   * @param {boolean} [raw] Raw output switch
+   * @returns {string} MD5 output
+   */
+  function md5(string, key, raw) {
+    if (!key) {
+      if (!raw) {
+        return hexMD5(string)
+      }
+      return rawMD5(string)
+    }
+    if (!raw) {
+      return hexHMACMD5(key, string)
+    }
+    return rawHMACMD5(key, string)
+  }
+
+  if (typeof define === 'function' && define.amd) {
+    define(function () {
+      return md5
+    })
+  } else if (typeof module === 'object' && module.exports) {
+    module.exports = md5
+  } else {
+    $.md5 = md5
+  }
+})(this)
+/* ============================ TABS / TOP BUTTONS ============================ */
+function switchView(v){ currentView=v;
+  document.querySelectorAll(".tab").forEach(t=>t.classList.toggle("active",t.dataset.view===v));
+  document.querySelectorAll(".view").forEach(s=>s.classList.toggle("active",s.id==="view-"+v));
+}
+document.querySelectorAll(".tab").forEach(t=>t.onclick=()=>switchView(t.dataset.view));
+
+document.getElementById("btnAdd").onclick=()=>{
+  openModal('<h3>＋ Add a poem</h3>'+
+    '<label>Title</label><input id="nTitle" placeholder="e.g. Othello" />'+
+    '<label>Author</label><input id="nAuthor" placeholder="e.g. Carol Ann Duffy" />'+
+    '<label>Context (optional)</label><input id="nContext" placeholder="Source, background…" />'+
+    '<label>Poem text (one line per verse, blank line between stanzas)</label><textarea id="nText" placeholder="Paste the poem here…"></textarea>'+
+    '<label>Analysis (optional)</label><textarea id="nAna" placeholder="Your or your teacher’s analysis…"></textarea>'+
+    '<div class="row"><button class="btn" id="nCancel">Cancel</button>'+
+    '<button class="btn primary" id="nSave">Add</button></div>');
+  document.getElementById("nCancel").onclick=closeModal;
+  document.getElementById("nSave").onclick=()=>{
+    const title=document.getElementById("nTitle").value.trim();
+    const text=document.getElementById("nText").value;
+    if(!title||!text.trim()){ alert("Please enter a title and the poem text"); return; }
+    const id="p"+Date.now();
+    state.poems.push({id,title,author:document.getElementById("nAuthor").value.trim(),
+      context:document.getElementById("nContext").value.trim(),
+      text, keyPassages:[], vocab:[],
+      analysis:document.getElementById("nAna").value.trim()});
+    currentPoem=id; closeModal(); switchView("read"); render();
+  };
+};
+document.getElementById("btnApi").onclick=()=>{
+  const a=state.api||{provider:"mymemory"};
+  openModal('<h3>🌐 Translation API</h3>'+
+    '<p style="color:var(--muted);font-size:13px">MyMemory is used by default (free, no key, generally reachable in China). For a more stable China-based API, enter a Baidu Translate account — you need an AppID and key.</p>'+
+    '<label>Provider</label>'+
+    '<select id="apiProv" style="width:100%;padding:8px;border-radius:8px;border:1px solid var(--line)">'+
+    '<option value="mymemory"'+(a.provider!=="baidu"?" selected":"")+'>MyMemory (default, no key)</option>'+
+    '<option value="baidu"'+(a.provider==="baidu"?" selected":"")+'>Baidu Translate (China-based API)</option></select>'+
+    '<label>Baidu AppID</label><input id="apiId" value="'+(a.baiduAppid||"")+'" />'+
+    '<label>Baidu key</label><input id="apiKey" value="'+(a.baiduKey||"")+'" placeholder="Get one at api.fanyi.baidu.com" />'+
+    '<div class="row"><button class="btn" id="apiCancel">Cancel</button>'+
+    '<button class="btn primary" id="apiSave">Save</button></div>');
+  document.getElementById("apiCancel").onclick=closeModal;
+  document.getElementById("apiSave").onclick=()=>{
+    state.api={provider:document.getElementById("apiProv").value,
+      baiduAppid:document.getElementById("apiId").value.trim(),
+      baiduKey:document.getElementById("apiKey").value.trim()};
+    closeModal(); save();
+    alert("Saved. Now select text and click Translate to use it.");
+  };
+};
+document.getElementById("btnExport").onclick=()=>{
+  const blob=new Blob([JSON.stringify(state,null,2)],{type:"application/json"});
+  const a=document.createElement("a"); a.href=URL.createObjectURL(blob);
+  a.download="englitlab-backup.json"; a.click();
+};
+document.getElementById("btnImport").onclick=()=>{
+  const inp=document.createElement("input"); inp.type="file"; inp.accept=".json";
+  inp.onchange=()=>{ const f=inp.files[0]; if(!f) return; const rd=new FileReader();
+    rd.onload=()=>{ try{ const s=JSON.parse(rd.result); if(!s.poems) throw 0;
+      if(confirm("Importing will overwrite your current data. Continue?")){ state=s; currentPoem=state.poems[0].id; save(); render(); } }
+      catch(e){ alert("File format is invalid"); } };
+    rd.readAsText(f); };
+  inp.click();
+};
+document.getElementById("btnHelp").onclick=()=>{
+  openModal('<h3>？ Help</h3>'+
+    '<ul><li><b>Read &amp; Annotate:</b> select any text in the poem and a toolbar appears → <b>Annotate</b> (write your note), <b>Translate</b> (EN→ZH), or <b>Vocab</b> (save the word). Click a yellow/green highlight to read its note. You can also just <b>click a single word</b> to pop the toolbar.</li>'+
+    '<li><b>Analysis:</b> the full teacher analysis — themes, devices, structure, and IB essay ideas.</li>'+
+    '<li><b>Key lines:</b> teacher-annotated key lines; click a card to jump to its highlight in the poem.</li>'+
+    '<li><b>Vocab:</b> hard words with examples and notes; add or delete as you like.</li>'+
+    '<li><b>Add a poem:</b> for each new poem, click “Add poem”, paste it, and it joins the library.</li>'+
+    '<li><b>Export / Import:</b> click Export to save a JSON backup; Import restores it on another machine.</li>'+
+    '<li><b>Translation API:</b> MyMemory by default. If it is unstable in China, open Translation API and enter a Baidu Translate AppID/key (a China-based API).</li></ul>'+
+    '<div class="row"><button class="btn primary" id="hOk">Got it</button></div>');
+  document.getElementById("hOk").onclick=closeModal;
+};
+
+/* ============================ UTIL ============================ */
+function esc(s){ return (s==null?"":String(s)).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;"); }
+
+/* init */
+render();
+</script>
+</body>
+</html>
