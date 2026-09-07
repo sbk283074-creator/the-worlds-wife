@@ -3,6 +3,7 @@
 
 # Source poem inputs (not needed to serve the site)
 *.docx
+*.pdf
 
 # OS noise
 .DS_Store
