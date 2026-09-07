@@ -2863,19 +2863,30 @@ function freshSeed(){
   return s;
 }
 function load(){
-  let s=null;
+  const fresh = freshSeed();
+  let saved=null;
   try{
     const raw = localStorage.getItem(LS_KEY);
-    if(raw){ const p=JSON.parse(raw); if(p&&p.poems) s=p; }
+    if(raw){ const p=JSON.parse(raw); if(p&&p.poems) saved=p; }
   }catch(e){}
-  if(!s||!s.poems){ return freshSeed(); }
-  const ids = new Set(s.poems.map(p=>p.id));
-  SEED.poems.forEach(sp=>{ if(!ids.has(sp.id)){ s.poems.push(JSON.parse(JSON.stringify(sp))); ids.add(sp.id); } });
-  s.vocab = s.vocab||[];
-  const vids = new Set(s.vocab.map(v=>v.word));
-  SEED.poems.forEach(sp=> (sp.vocab||[]).forEach(v=>{ if(v&&v.word&&!vids.has(v.word)){ s.vocab.push(JSON.parse(JSON.stringify(v))); vids.add(v.word); } }));
-  if(!s.api) s.api={provider:"mymemory",baiduAppid:"",baiduKey:""};
-  return s;
+  if(!saved||!saved.poems) return fresh;
+  // SEED is authoritative for poem content (text, context, keyPassages, analysis, vocab, author):
+  // always take the latest version so updates to the study site show up on next visit.
+  const seedById = new Map(fresh.poems.map(p=>[p.id,p]));
+  const out = fresh.poems.slice();
+  // preserve any user-added poems that are NOT part of SEED
+  (saved.poems||[]).forEach(p=>{ if(p&&p.id && !seedById.has(p.id)) out.push(JSON.parse(JSON.stringify(p))); });
+  // keep the user's own annotations
+  fresh.annotations = (saved.annotations && typeof saved.annotations==="object") ? saved.annotations : {};
+  // merge vocab: keep user's saved words, then add any seed words not yet present
+  const mergedVocab = [];
+  const vids = new Set();
+  (saved.vocab||[]).forEach(v=>{ if(v&&v.word&&!vids.has(v.word)){ mergedVocab.push(JSON.parse(JSON.stringify(v))); vids.add(v.word); } });
+  SEED.poems.forEach(sp=> (sp.vocab||[]).forEach(v=>{ if(v&&v.word&&!vids.has(v.word)){ mergedVocab.push(JSON.parse(JSON.stringify(v))); vids.add(v.word); } }));
+  fresh.vocab = mergedVocab;
+  fresh.api = (saved.api && typeof saved.api==="object") ? saved.api : fresh.api;
+  fresh.poems = out;
+  return fresh;
 }
 function save(){ try{ localStorage.setItem(LS_KEY, JSON.stringify(state)); }catch(e){} }
 function getPoem(id){ return state.poems.find(p=>p.id===id); }
